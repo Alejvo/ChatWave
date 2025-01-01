@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  api:
+    container_name: chatwave.api
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"
+    environment:
+      - ConnectionStrings__Default=Server=localhost,1434;Database=ChatWave;User Id=sa;Password=Strong_Password;
+    depends_on:
+      - db
+    networks:
+      - chatwave-network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: chatwave.db
+    ports:
+      - "1434:1433"
+    environment:
+      SA_PASSWORD: "Strong_Password"
+      ACCEPT_EULA: "Y"
+    networks:
+      - chatwave-network
+
+networks:
+  chatwave-network:
+    driver: bridge
