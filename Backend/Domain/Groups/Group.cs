@@ -21,7 +21,7 @@
 
         public static Group Create(string id, string name, string description, byte[] image)
         {
-            var group = new Group();
+            var group = new Group(id,name,description,image);
             return group;
         }
     }

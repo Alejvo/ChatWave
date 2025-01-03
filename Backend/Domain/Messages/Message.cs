@@ -4,9 +4,9 @@
     {
         public string MessageId { get; set; }
         public string Text { get; set; }
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
-        public DateTime SentAt { get; set; }
+        public  string SenderId { get; set; }
+        public  string ReceiverId { get; set; }
+        public  DateTime SentAt { get; set; }
 
         private Message()
         {

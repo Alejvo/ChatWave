@@ -2,6 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
 COPY *.sln ./
+COPY Shared/ ./Shared/
 COPY Domain/ ./Domain/
 COPY Infrastructure/ ./Infrastructure/
 COPY Application/ ./Application/
