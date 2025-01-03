@@ -1,4 +1,6 @@
 ﻿
+using Domain.Groups;
+
 namespace Domain.Users
 {
     public sealed class User
@@ -11,6 +13,8 @@ namespace Domain.Users
         public DateTime Birthday { get; set; }
         public string Username { get; set; }
         public byte[] ProfileImage { get; set; }
+        public List<Group> Groups { get; set; } = new List<Group>();
+        public List<User> Friends { get; set; } = new List<User>();
 
         private User(string id, string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
         {
@@ -24,14 +28,27 @@ namespace Domain.Users
             ProfileImage = profileImage;
         }
 
+        private User(string id, string username, byte[] profileImage)
+        {
+            Id = id;
+            Username = username;
+            ProfileImage = profileImage;
+        }
+
         private User()
         {
         }
 
-        public static User Create(string firstName, string lastName, string email, string password, DateTime birthday, string userName, byte[] profileImage)
+        public static User Create(string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
         {
             var id = Guid.NewGuid().ToString();
-            var user = new User(id,firstName,lastName,email,password,birthday,userName,profileImage);
+            var user = new User(id,firstName,lastName,email,password,birthday,username,profileImage);
+            return user;
+        }
+
+        public static User Create(string id,string username, byte[] profileImage)
+        {
+            var user = new User(id, username,profileImage);
             return user;
         }
     }

@@ -6,7 +6,7 @@
         Task<User?> GetById(string id);
         Task CreateAsync(object param);
         Task UpdateAsync(object param);
-        Task DeleteAsync(object param);
+        Task DeleteAsync(string id);
         Task<IEnumerable<User>> GetUsersByUsername(string username);
         Task<bool> IsEmailUnique(string email);
         Task<bool> IsUserNameUnique(string username);

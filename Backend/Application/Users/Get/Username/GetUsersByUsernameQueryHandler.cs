@@ -16,10 +16,8 @@ public sealed class GetUsersByUsernameQueryHandler : IQueryHandler<GetUsersByUse
     public async Task<Result<IEnumerable<UserResponse>>> Handle(GetUsersByUsernameQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUsersByUsername(request.username);
-        if (user == null)
-        {
-            return default;
-        }
+        if (user == null) UserErrors.NotFoundByUsername(request.username);
+   
         var userResponse = user.Select(user => UserResponse.ToUserResponse(user));
         return userResponse.ToList();
     }

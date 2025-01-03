@@ -7,20 +7,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Users.Create
+namespace Application.Users.Update
 {
-    internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
+    internal sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand>
     {
         private readonly IUserRepository _userRepository;
 
-        public CreateUserCommandHandler(IUserRepository userRepository)
+        public UpdateUserCommandHandler(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             byte[] profileImageBytes = null;
+            var user = await _userRepository.GetById( request.Id );
+            if (user == null) return UserErrors.NotFound(request.Id);
             if (request.ProfileImage != null)
             {
                 using (var memoryStream = new MemoryStream())
@@ -29,23 +31,16 @@ namespace Application.Users.Create
                     profileImageBytes = memoryStream.ToArray();
                 }
             }
-            var user = User.Create(
+
+            await _userRepository.UpdateAsync(new
+            {
+                user.Id,
                 request.FirstName,
                 request.LastName,
                 request.Email,
                 request.Password,
                 request.Birthday,
-                request.UserName,
-                profileImageBytes);
-
-            await _userRepository.CreateAsync(new {
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                user.Email,
-                user.Password,
-                user.Birthday,
-                user.Username,
+                request.Username,
                 ProfileImage = profileImageBytes
             });
             return Result.Success();

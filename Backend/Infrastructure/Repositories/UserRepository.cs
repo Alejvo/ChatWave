@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Domain.Groups;
 using Domain.Users;
 using Infrastructure.Factories;
 using System.Data;
@@ -29,27 +30,117 @@ public class UserRepository : IUserRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public Task DeleteAsync(object param)
+    public async Task DeleteAsync(string id)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        await connection.ExecuteAsync(
+            UserProcedures.DeleteUser,
+            new { id },
+            commandType: CommandType.StoredProcedure
+        );
     }
 
     public async Task<IEnumerable<User>> GetAll()
     {
         using var connection = _sqlConnection.CreateConnection();
-        return await connection.QueryAsync<User>(
+        var userDictionary = new Dictionary<string, User>();
+        await connection.QueryAsync<User, Group, User, User>(
             UserProcedures.GetUsers,
-            commandType: CommandType.StoredProcedure);
+            (user, group, friend) =>
+            {
+
+                if (!userDictionary.TryGetValue(user.Id, out var userEntry))
+                {
+                    userEntry = user;
+                    userEntry.Groups = new List<Group>();
+                    userEntry.Friends = new List<User>();
+                    userDictionary.Add(userEntry.Id, userEntry);
+                }
+                if (group != null && !userEntry.Groups.Any(g => g.Id == group.Id))
+                {
+                    var newGroup = Group.Create(group.Id,group.Name,group.Description,group.Image);
+                    userEntry.Groups.Add(newGroup);
+                }
+                if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
+                {
+                    var newFriend = User.Create(friend.Id,friend.Username,friend.ProfileImage);
+                    userEntry.Friends.Add(newFriend);
+                }
+                return userEntry;
+            },
+            commandType: CommandType.StoredProcedure,
+            splitOn: "Id,Id"
+            );
+        return userDictionary.Values;
     }
 
-    public Task<User?> GetById(string id)
+    public async Task<User?> GetById(string id)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        var userDictionary = new Dictionary<string, User>();
+        await connection.QueryAsync<User, Group, User, User>(
+            UserProcedures.GetUserById,
+            (user, group, friend) =>
+            {
+                if (!userDictionary.TryGetValue(user.Id, out var userEntry))
+                {
+                    userEntry = user;
+                    userEntry.Groups = new List<Group>();
+                    userEntry.Friends = new List<User>();
+                    userDictionary.Add(userEntry.Id, userEntry);
+                }
+                if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
+                {
+                    var newGroup = Group.Create(group.Id,group.Name,group.Description,group.Image);
+                    userEntry.Groups.Add(newGroup);
+                }
+                if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
+                {
+                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
+
+                    userEntry.Friends.Add(newFriend);
+                }
+                return userEntry;
+            },
+            param: new { id },
+            commandType: CommandType.StoredProcedure,
+            splitOn: "Id,Id"
+            );
+        return userDictionary.Values.FirstOrDefault();
     }
 
-    public Task<IEnumerable<User>> GetUsersByUsername(string username)
+    public async Task<IEnumerable<User>> GetUsersByUsername(string username)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        var userDictionary = new Dictionary<string, User>();
+        await connection.QueryAsync<User, Group, User, User>(
+            UserProcedures.GetUsersByUsername,
+            (user, group, friend) =>
+            {
+                if (!userDictionary.TryGetValue(user.Id, out var userEntry))
+                {
+                    userEntry = user;
+                    userEntry.Groups = new List<Group>();
+                    userEntry.Friends = new List<User>();
+                    userDictionary.Add(userEntry.Id, userEntry);
+                }
+                if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
+                {
+                    var newGroup = Group.Create(group.Id, group.Name, group.Description, group.Image);
+                    userEntry.Groups.Add(newGroup);
+                }
+                if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
+                {
+                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
+                    userEntry.Friends.Add(newFriend);
+                }
+                return userEntry;
+            },
+            param: new { username },
+            commandType: CommandType.StoredProcedure,
+            splitOn: "Id,Id"
+            );
+        return userDictionary.Values;
     }
 
     public Task<bool> IsEmailUnique(string email)
@@ -67,8 +158,12 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task UpdateAsync(object param)
+    public async Task UpdateAsync(object param)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        await connection.ExecuteAsync(
+            UserProcedures.UpdateUser,
+            param,
+            commandType: CommandType.StoredProcedure);
     }
 }
