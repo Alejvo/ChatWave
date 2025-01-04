@@ -24,6 +24,12 @@ services:
       ACCEPT_EULA: "Y"
     networks:
       - chatwave-network
+    volumes:
+      - chatwave_data:/var/opt/mssql
+
+volumes:
+  chatwave_data:
+    driver: local
 
 networks:
   chatwave-network:
