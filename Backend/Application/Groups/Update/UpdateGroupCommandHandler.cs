@@ -31,6 +31,7 @@ internal sealed class UpdateGroupCommandHandler : ICommandHandler<UpdateGroupCom
         }
 
         var updatedGroup = GroupRequest.Create(
+            request.Id,
             request.Name,
             request.Description,
             imageBytes

@@ -30,4 +30,10 @@ public sealed class UserRequest
         return user;
     }
 
+    public static UserRequest Create(string id,string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
+    {
+        var user = new UserRequest(id, firstName, lastName, email, password, birthday, username, profileImage);
+        return user;
+    }
+
 }

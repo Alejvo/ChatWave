@@ -21,4 +21,10 @@ public sealed class GroupRequest
         var group = new GroupRequest(id, name, description, image);
         return group;
     }
+
+    public static GroupRequest Create(string id,string name, string description, byte[] image)
+    {
+        var group = new GroupRequest(id, name, description, image);
+        return group;
+    }
 }

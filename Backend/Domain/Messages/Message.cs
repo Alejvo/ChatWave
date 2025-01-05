@@ -2,11 +2,11 @@
 {
     public sealed class Message
     {
-        public string MessageId { get; set; }
-        public string Text { get; set; }
-        public  string SenderId { get; set; }
-        public  string ReceiverId { get; set; }
-        public  DateTime SentAt { get; set; }
+        public string? MessageId { get; private set; }
+        public string? Text { get; set; }
+        public  string? SenderId { get; set; }
+        public  string? ReceiverId { get; set; }
+        public  DateTime? SentAt { get; set; }
 
         private Message()
         {

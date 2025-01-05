@@ -1,12 +1,11 @@
-﻿namespace Domain.Groups
+﻿namespace Domain.Groups;
+
+public interface IGroupRepository
 {
-    public interface IGroupRepository
-    {
-        Task<IEnumerable<Group>> GetAll();
-        Task<Group?> GetById(string id);
-        Task<IEnumerable<Group>> GetByName(string name);
-        Task CreateAsync(GroupRequest group);
-        Task UpdateAsync(GroupRequest group);
-        Task DeleteAsync(string id);
-    }
+    Task<IEnumerable<Group>> GetAll();
+    Task<Group?> GetById(string id);
+    Task<IEnumerable<Group>> GetByName(string name);
+    Task CreateAsync(GroupRequest group);
+    Task UpdateAsync(GroupRequest group);
+    Task DeleteAsync(string id);
 }

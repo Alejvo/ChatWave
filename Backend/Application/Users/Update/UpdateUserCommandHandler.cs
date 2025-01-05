@@ -15,7 +15,7 @@ internal sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserComma
 
     public async Task<Result> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
-        byte[] profileImageBytes = null;
+        byte[]? profileImageBytes = null;
         var user = await _userRepository.GetById( request.Id );
         if (user == null) return UserErrors.NotFound(request.Id);
         if (request.ProfileImage != null)
@@ -28,6 +28,7 @@ internal sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserComma
         }
 
         var updatedUser = UserRequest.Create(
+            request.Id,
             request.FirstName,
             request.LastName,
             request.Email,

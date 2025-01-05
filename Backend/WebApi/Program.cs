@@ -1,5 +1,6 @@
 using Application;
 using Infrastructure;
+using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,9 @@ builder.Services
     .AddInfrastructure()
     .AddApplication();
 
+builder.Services.AddTransient<ErrorHandlingMiddleware>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -23,7 +27,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseErrorHandlingMiddleware();
 
 app.UseAuthorization();
 
