@@ -21,6 +21,9 @@ internal sealed class JoinGroupCommandHandler : ICommandHandler<JoinGroupCommand
         var user = await _userRepository.GetById(request.UserId);
         if (user == null) return UserErrors.NotFound(request.UserId);
 
+        var group = await _groupRepository.GetById(request.GroupId);
+        if(group == null) return GroupErrors.NotFound(request.GroupId);
+
         var result = await _groupRepository.Join(request.GroupId,request.UserId);
         if (!result) return GroupErrors.UserIsAlreadyInTheGroup(request.UserId);
         return Result.Success();

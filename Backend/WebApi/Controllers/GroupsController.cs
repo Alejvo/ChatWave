@@ -7,13 +7,14 @@ using Application.Groups.JoinGroup;
 using Application.Groups.LeaveGroup;
 using Application.Groups.Update;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
 [Route("api/groups")]
-[ApiController]
+[Authorize]
 public class GroupsController : ApiController
 {
     private readonly ISender _sender;

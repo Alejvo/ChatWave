@@ -1,4 +1,5 @@
-﻿using Application.Users.Create;
+﻿using Application.Abstractions;
+using Application.Users.Create;
 using Application.Users.Delete;
 using Application.Users.Get.All;
 using Application.Users.Get.Id;
@@ -6,25 +7,29 @@ using Application.Users.Get.Username;
 using Application.Users.Update;
 using Domain.Users;
 using MediatR;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
 namespace WebApi.Controllers
 {
     [Route("api/users")]
+    [Authorize]
     public class UsersController : ApiController
     {
         private readonly ISender _sender;
         private readonly IUserRepository _userRepository;
-        
-        public UsersController(ISender sender,IUserRepository userRepository)
+        private readonly IAuthService _authService;
+
+        public UsersController(ISender sender, IUserRepository userRepository, IAuthService authService)
         {
             _sender = sender;
             _userRepository = userRepository;
+            _authService = authService;
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([FromForm] CreateUserCommand command)
         {
             Result res = await _sender.Send(command);
@@ -70,5 +75,21 @@ namespace WebApi.Controllers
             var res = await _sender.Send(command);
             return res.IsSuccess ? NoContent() : Problem(res.Errors);
         }
+
+        [HttpPost]
+        [Route("login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        {
+            var user = await _userRepository.LoginUser(request.Email,request.Password);
+            if(user == null) return BadRequest();
+
+            var token = _authService.GenerateToken(user.Id, user.Username);
+            var refreshToken = _authService.GenerateRefreshToken();
+
+            await _authService.SaveRefreshToken(user.Id, refreshToken);
+            return Ok(new { token, refreshToken });
+        }
+
     }
 }

@@ -153,9 +153,14 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<User> LoginUser(string email, string password)
+    public async Task<User?> LoginUser(string email, string password)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        var user = await connection.QuerySingleOrDefaultAsync<User>(
+            UserProcedures.LoginUser,
+            new { email, password },
+            commandType: CommandType.StoredProcedure);
+        return user;
     }
 
     public async Task UpdateAsync(UserRequest user)

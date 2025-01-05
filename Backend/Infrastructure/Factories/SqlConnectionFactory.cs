@@ -1,20 +1,19 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace Infrastructure.Factories
+namespace Infrastructure.Factories;
+
+public class SqlConnectionFactory
 {
-    public class SqlConnectionFactory
+    private readonly string _connectionFactory;
+
+    public SqlConnectionFactory(string connectionFactory)
     {
-        private readonly string _connectionFactory;
+        _connectionFactory = connectionFactory;
+    }
 
-        public SqlConnectionFactory(string connectionFactory)
-        {
-            _connectionFactory = connectionFactory;
-        }
-
-        public IDbConnection CreateConnection()
-        {
-            return new SqlConnection(_connectionFactory);
-        }
+    public IDbConnection CreateConnection()
+    {
+        return new SqlConnection(_connectionFactory);
     }
 }

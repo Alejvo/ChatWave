@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.Abstractions;
+using Application.Users.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
 
@@ -10,6 +12,9 @@ public static class DependencyInjection
         {
             config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
         });
+
+        services.AddScoped<IAuthService,AuthService>();
+
         return services;
     }
 }
