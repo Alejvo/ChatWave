@@ -8,6 +8,6 @@ public interface IGroupRepository
     Task CreateAsync(GroupRequest group);
     Task UpdateAsync(GroupRequest group);
     Task DeleteAsync(string id);
-    Task Join(string groupId, string userId);
-    Task Leave(string groupId, string userId);
+    Task<bool> Join(string groupId, string userId);
+    Task<bool> Leave(string groupId, string userId);
 }

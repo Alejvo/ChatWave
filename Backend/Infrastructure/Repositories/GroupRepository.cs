@@ -59,19 +59,27 @@ public class GroupRepository : IGroupRepository
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task Join(string groupId, string userId)
+    public async Task<bool> Join(string groupId, string userId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.ExecuteAsync(
+        var result = await connection.ExecuteAsync(
             GroupProcedures.JoinGroup,
             new { groupId, userId },
             commandType: CommandType.StoredProcedure);
+        if (result > 0) return true;
+        else return false;
     }
 
-    public async Task Leave(string groupId, string userId)
+    public async Task<bool> Leave(string groupId, string userId)
     {
-        throw new NotImplementedException();
-    }
+        using var connection = _sqlConnection.CreateConnection();
+        var result = await connection.ExecuteAsync(
+            GroupProcedures.LeaveGroup,
+            new { groupId, userId },
+            commandType: CommandType.StoredProcedure);
+        if (result > 0) return true;
+        else return false;
+        }
 
     public async Task UpdateAsync(GroupRequest group)
     {

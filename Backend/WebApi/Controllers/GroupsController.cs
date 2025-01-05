@@ -3,6 +3,8 @@ using Application.Groups.Delete;
 using Application.Groups.Get.All;
 using Application.Groups.Get.Id;
 using Application.Groups.Get.Name;
+using Application.Groups.JoinGroup;
+using Application.Groups.LeaveGroup;
 using Application.Groups.Update;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -63,6 +65,22 @@ public class GroupsController : ApiController
     public async Task<IActionResult> DeleteGroup(string id)
     {
         var res = await _sender.Send(new DeleteGroupCommand(id));
+        return res.IsSuccess ? NoContent() : Problem(res.Errors);
+    }
+
+    [HttpPost]
+    [Route("join")]
+    public async Task<IActionResult> Join([FromBody] JoinGroupCommand command)
+    {
+        var res = await _sender.Send(command);
+        return res.IsSuccess ? NoContent() : Problem(res.Errors);
+    }
+
+    [HttpPost]
+    [Route("leave")]
+    public async Task<IActionResult> Leave([FromBody] LeaveGroupCommand command)
+    {
+        var res = await _sender.Send(command);
         return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 }
