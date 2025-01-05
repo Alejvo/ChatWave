@@ -1,54 +1,39 @@
 ﻿using Application.Abstractions;
 using Domain.Users;
 using Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Users.Create
+namespace Application.Users.Create;
+
+internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
 {
-    internal sealed class CreateUserCommandHandler : ICommandHandler<CreateUserCommand>
+    private readonly IUserRepository _userRepository;
+
+    public CreateUserCommandHandler(IUserRepository userRepository)
     {
-        private readonly IUserRepository _userRepository;
+        _userRepository = userRepository;
+    }
 
-        public CreateUserCommandHandler(IUserRepository userRepository)
+    public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    {
+        byte[] profileImageBytes = null;
+        if (request.ProfileImage != null)
         {
-            _userRepository = userRepository;
-        }
-
-        public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
-        {
-            byte[] profileImageBytes = null;
-            if (request.ProfileImage != null)
+            using (var memoryStream = new MemoryStream())
             {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await request.ProfileImage.CopyToAsync(memoryStream);
-                    profileImageBytes = memoryStream.ToArray();
-                }
+                await request.ProfileImage.CopyToAsync(memoryStream);
+                profileImageBytes = memoryStream.ToArray();
             }
-            var user = User.Create(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                request.Password,
-                request.Birthday,
-                request.UserName,
-                profileImageBytes);
-
-            await _userRepository.CreateAsync(new {
-                user.Id,
-                user.FirstName,
-                user.LastName,
-                user.Email,
-                user.Password,
-                user.Birthday,
-                user.Username,
-                ProfileImage = profileImageBytes
-            });
-            return Result.Success();
         }
+        var user = UserRequest.Create(
+            request.FirstName,
+            request.LastName,
+            request.Email,
+            request.Password,
+            request.Birthday,
+            request.UserName,
+            profileImageBytes);
+
+        await _userRepository.CreateAsync(user);
+        return Result.Success();
     }
 }

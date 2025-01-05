@@ -1,9 +1,8 @@
-﻿
-using Domain.Groups;
+﻿using Domain.Groups;
 
 namespace Domain.Users
 {
-    public sealed class User
+    public class User
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -39,9 +38,8 @@ namespace Domain.Users
         {
         }
 
-        public static User Create(string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
+        public static User Create(string id,string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
         {
-            var id = Guid.NewGuid().ToString();
             var user = new User(id,firstName,lastName,email,password,birthday,username,profileImage);
             return user;
         }

@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.Users.Common;
 using Domain.Users;
+using Shared;
 
 namespace Application.Users.Get.Username;
 
@@ -16,9 +17,9 @@ public sealed class GetUsersByUsernameQueryHandler : IQueryHandler<GetUsersByUse
     public async Task<Result<IEnumerable<UserResponse>>> Handle(GetUsersByUsernameQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetUsersByUsername(request.username);
-        if (user == null) UserErrors.NotFoundByUsername(request.username);
-   
-        var userResponse = user.Select(user => UserResponse.ToUserResponse(user));
+        if (user == null) return Result.Failure<IEnumerable<UserResponse>>(UserErrors.NotFoundByUsername(request.username));
+
+        var userResponse = user.Select(user => user.ToUserResponse());
         return userResponse.ToList();
     }
 }

@@ -16,7 +16,7 @@ namespace Application.Users.Get.All
         public async Task<Result<IEnumerable<UserResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             var users = await _userRepository.GetAll();
-            var usersResponse = users.Select(user => UserResponse.ToUserResponse(user)).ToList();
+            var usersResponse = users.Select(user => user.ToUserResponse()).ToList();
             return usersResponse;
         }
     }

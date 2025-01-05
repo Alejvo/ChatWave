@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Create([FromForm] CreateUserCommand command)
         {
             var res = await _sender.Send(command);
-            return res.IsSuccess ? Ok() : BadRequest();
+            return res.IsSuccess ? Created() : BadRequest();
         }
 
 

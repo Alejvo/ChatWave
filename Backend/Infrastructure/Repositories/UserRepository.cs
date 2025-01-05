@@ -21,12 +21,12 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public async Task CreateAsync(object param)
+    public async Task CreateAsync(UserRequest user)
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
             UserProcedures.CreateUser,
-            param,
+            user,
             commandType: CommandType.StoredProcedure);
     }
 
@@ -158,12 +158,12 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public async Task UpdateAsync(object param)
+    public async Task UpdateAsync(UserRequest user)
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
             UserProcedures.UpdateUser,
-            param,
+            user,
             commandType: CommandType.StoredProcedure);
     }
 }
