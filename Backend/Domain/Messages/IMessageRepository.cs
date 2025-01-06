@@ -2,8 +2,8 @@
 
 public interface IMessageRepository
 {
-    Task SendToUser(object param);
-    Task SendToGroup(object param);
-    Task<IEnumerable<Message>> GetGroupMessages(string receiver, string group);
-    Task<IEnumerable<Message>> GetUserMessages(string receiver, string sender);
+    Task SendToUser(UserMessage message);
+    Task SendToGroup(GroupMessage message);
+    Task<IEnumerable<GroupMessage>> GetGroupMessages(string receiver, string group);
+    Task<IEnumerable<UserMessage>> GetUserMessages(string receiver, string sender);
 }

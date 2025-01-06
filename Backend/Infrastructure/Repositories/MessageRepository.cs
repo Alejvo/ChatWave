@@ -1,25 +1,41 @@
-﻿using Domain.Messages;
+﻿using Dapper;
+using Domain.Messages;
+using Infrastructure.Factories;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace Infrastructure.Repositories;
 
 public class MessageRepository : IMessageRepository
 {
-    public Task<IEnumerable<Message>> GetGroupMessages(string receiver, string group)
+    private readonly SqlConnectionFactory _sqlConnection;
+
+    public async Task<IEnumerable<GroupMessage>> GetGroupMessages(string receiver, string group)
+    {
+        using var connection = _sqlConnection.CreateConnection();
+        return await connection.QueryAsync<GroupMessage>(
+                MessageProcedures.GetGroupMessages,
+                param: new { GroupId = group },
+                commandType: CommandType.StoredProcedure
+            );
+    }
+
+    public Task<IEnumerable<UserMessage>> GetUserMessages(string receiver, string sender)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Message>> GetUserMessages(string receiver, string sender)
+    public async Task SendToGroup(GroupMessage message)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        await connection.ExecuteAsync(
+             MessageProcedures.SendToGroup,
+             message,
+             commandType: CommandType.StoredProcedure
+            );
     }
 
-    public Task SendToGroup(object param)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task SendToUser(object param)
+    public Task SendToUser(UserMessage message)
     {
         throw new NotImplementedException();
     }
