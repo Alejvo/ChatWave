@@ -9,5 +9,4 @@ public static class UserProcedures
     public const string UpdateUser = "UpdateUser";
     public const string DeleteUser = "DeleteUser";
     public const string LoginUser = "LoginUser";
-    public const string AddFriend = "AddFriend";
 }

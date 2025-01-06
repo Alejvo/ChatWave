@@ -16,11 +16,6 @@ public class UserRepository : IUserRepository
         _sqlConnection = sqlConnection;
     }
 
-    public Task AddFriend(string userId, string friendId)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task CreateAsync(UserRequest user)
     {
         using var connection = _sqlConnection.CreateConnection();

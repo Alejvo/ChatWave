@@ -1,4 +1,5 @@
-﻿using Domain.Groups;
+﻿using Domain.Friends;
+using Domain.Groups;
 using Domain.Messages;
 using Domain.Tokens;
 using Domain.Users;
@@ -27,6 +28,8 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository,UserRepository>();
         services.AddScoped<IMessageRepository,MessageRepository>();
         services.AddScoped<ITokenRepository,TokenRepository>();
+        services.AddScoped<IFriendRepository,FriendRepository>();
+
         return services;
     }
 }
