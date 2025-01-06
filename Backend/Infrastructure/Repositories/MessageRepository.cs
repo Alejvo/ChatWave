@@ -20,9 +20,15 @@ public class MessageRepository : IMessageRepository
             );
     }
 
-    public Task<IEnumerable<UserMessage>> GetUserMessages(string receiver, string sender)
+    public async Task<IEnumerable<UserMessage>> GetUserMessages(string receiver, string sender)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+
+        return await connection.QueryAsync<UserMessage>(
+                MessageProcedures.GetUserMessages,
+                param: new { ReceiverId = receiver, SenderId = sender },
+                commandType: CommandType.StoredProcedure
+            );
     }
 
     public async Task SendToGroup(GroupMessage message)
@@ -35,8 +41,13 @@ public class MessageRepository : IMessageRepository
             );
     }
 
-    public Task SendToUser(UserMessage message)
+    public async Task SendToUser(UserMessage message)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        await connection.ExecuteAsync(
+             MessageProcedures.SendToUser,
+             message,
+             commandType: CommandType.StoredProcedure
+            );
     }
 }
