@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.Users.Common;
 using Domain.Users;
+using Shared;
 
 namespace Application.Users.Get.All
 {

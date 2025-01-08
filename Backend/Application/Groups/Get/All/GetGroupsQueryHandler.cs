@@ -1,6 +1,7 @@
 ﻿using Application.Abstractions;
 using Application.Groups.Common;
 using Domain.Groups;
+using Shared;
 
 namespace Application.Groups.Get.All
 {

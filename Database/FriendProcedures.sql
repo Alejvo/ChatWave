@@ -39,23 +39,28 @@ BEGIN
 	VALUES (@Id,@UserId,@FriendId,@SentAt)
 END
 
-CREATE PROCEDURE GetFriendRequests
+ALTER PROCEDURE GetFriendRequests
 @UserId VARCHAR(80)
 AS
 BEGIN 
-	SELECT se.Id,se.Name,se.Username,se.ProfileImage FROM FriendRequest fr 
-	INNER JOIN User us On fr.ReceiverId = us.Id
-	INNER JOIN User se On fr.SenderId = se.Id
+	SELECT se.Id,se.FirstName,se.LastName,se.Username,se.ProfileImage 
+	FROM FriendRequest fr 
+	INNER JOIN Users se On fr.SenderId = se.Id
 	WHERE fr.ReceiverId = @UserId
 END
 
-CREATE FUNCTION IsUserYourFriend(@UserId VARCHAR(80),@FriendId VARCHAR(80))
-RETURNS INT
+ALTER FUNCTION IsUserYourFriend(@UserId VARCHAR(80),@FriendId VARCHAR(80))
+RETURNS BIT
 AS
 BEGIN 
-	DECLARE @Result INT;
+	DECLARE @Result BIT;
 	SELECT @Result = CASE 
 		WHEN COUNT(*) > 0 THEN 1
 		ELSE 0
-		FROM Friends where UserId = @UserId AND FriendId = @FriendId
+		END
+		FROM Friends 
+		WHERE UserId = @UserId AND FriendId = @FriendId
+
+		RETURN @Result;
 END
+
