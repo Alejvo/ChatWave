@@ -1,6 +1,8 @@
 using Application;
+using Application.Hubs;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebApi.Middleware;
@@ -12,6 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSignalR();
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -98,6 +102,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseErrorHandlingMiddleware();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.UseAuthentication();
 app.UseAuthorization();
