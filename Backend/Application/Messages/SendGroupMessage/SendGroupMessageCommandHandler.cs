@@ -27,13 +27,8 @@ internal sealed class SendGroupMessageCommandHandler : ICommandHandler<SendGroup
         var group = await _groupRepository.GetById(request.GroupId);
         if (group == null) return Result.Failure<IEnumerable<GroupMessage>>(GroupErrors.NotFound(request.GroupId));
 
-        var message = new GroupMessage(
-            Guid.NewGuid().ToString(),
-            request.Text,
-            request.SenderId,
-            request.GroupId,
-            request.SentAt
-            );
+        var id = Guid.NewGuid().ToString();
+        var message = GroupMessage.Create(id, request.Text, request.SenderId, request.GroupId, request.SentAt);
 
         await _messageRepository.SendToGroup(message);
         return Result.Success();

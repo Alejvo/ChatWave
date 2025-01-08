@@ -10,6 +10,11 @@ public class MessageRepository : IMessageRepository
 {
     private readonly SqlConnectionFactory _sqlConnection;
 
+    public MessageRepository(SqlConnectionFactory sqlConnection)
+    {
+        _sqlConnection = sqlConnection;
+    }
+
     public async Task<IEnumerable<GroupMessage>> GetGroupMessages(string receiver, string group)
     {
         using var connection = _sqlConnection.CreateConnection();

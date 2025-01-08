@@ -25,13 +25,8 @@ internal sealed class SendUserMessageCommandHandler : ICommandHandler<SendUserMe
         var sender = await _userRepository.GetById(request.SenderId);
         if (sender == null) return Result.Failure<IEnumerable<GroupMessage>>(UserErrors.NotFound(request.SenderId));
 
-        var message = new UserMessage(
-            Guid.NewGuid().ToString(),
-            request.Text,
-            request.SenderId,
-            request.ReceiverId,
-            request.SentAt
-            );
+        var id = Guid.NewGuid().ToString();
+        var message = UserMessage.Create(id,request.Text,request.SenderId,request.ReceiverId,request.SentAt);
 
         await _messageRepository.SendToUser(message);
         return Result.Success();
