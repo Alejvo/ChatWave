@@ -18,7 +18,7 @@ internal sealed class JoinGroupCommandHandler : ICommandHandler<JoinGroupCommand
 
     public async Task<Result> Handle(JoinGroupCommand request, CancellationToken cancellationToken)
     {
-        /*
+        
         var user = await _userRepository.GetById(request.UserId);
         if (user == null) return UserErrors.NotFound(request.UserId);
 
@@ -26,7 +26,7 @@ internal sealed class JoinGroupCommandHandler : ICommandHandler<JoinGroupCommand
         if(group == null) return GroupErrors.NotFound(request.GroupId);
 
         var result = await _groupRepository.Join(request.GroupId,request.UserId);
-        if (!result) return GroupErrors.UserIsAlreadyInTheGroup(request.UserId);*/
+        if (!result) return GroupErrors.UserIsAlreadyInTheGroup(request.UserId);
         return Result.Success();
     }
 }

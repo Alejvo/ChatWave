@@ -18,12 +18,12 @@ public static class DependencyInjection
             config.RegisterServicesFromAssemblyContaining<ApplicationAssemblyReference>();
         });
 
-        services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
-
         services.AddSignalR();
         services.AddScoped(
             typeof(IPipelineBehavior<,>),
             typeof(ValidationBehavior<,>));
+
+        services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 
         services.AddScoped<IAuthService,AuthService>();
         services.AddSingleton<IUserIdProvider, AppUserIdProvider>();

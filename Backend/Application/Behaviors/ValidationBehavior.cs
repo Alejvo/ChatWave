@@ -5,13 +5,13 @@ using Shared;
 namespace Application.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> 
-    where TRequest : IRequest 
+    where TRequest : IRequest<TResponse> 
     where TResponse : IResult
 {
 
     private readonly IValidator<TRequest>? _validator;
 
-    public ValidationBehavior(IValidator<TRequest>? validator)
+    public ValidationBehavior(IValidator<TRequest>? validator = null)
     {
         _validator = validator;
     }
@@ -35,6 +35,6 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
                     validationFailure.PropertyName,
                     validationFailure.ErrorMessage
                 ));
-        return (dynamic)errors;
+        return (TResponse)(IResult)Result.Failure(errors);
     }
 }

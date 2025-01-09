@@ -49,7 +49,7 @@ BEGIN
 	WHERE fr.ReceiverId = @UserId
 END
 
-ALTER FUNCTION IsUserYourFriend(@UserId VARCHAR(80),@FriendId VARCHAR(80))
+CREATE FUNCTION IsUserYourFriend(@UserId VARCHAR(80),@FriendId VARCHAR(80))
 RETURNS BIT
 AS
 BEGIN 

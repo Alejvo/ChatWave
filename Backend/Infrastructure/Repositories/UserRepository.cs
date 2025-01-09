@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Domain.Friends;
 using Domain.Groups;
 using Domain.Users;
 using Infrastructure.Factories;
@@ -138,14 +139,16 @@ public class UserRepository : IUserRepository
         return userDictionary.Values;
     }
 
-    public Task<bool> IsEmailUnique(string email)
+    public async Task<bool> IsEmailUnique(string email)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        return await connection.QuerySingleAsync<bool>("SELECT dbo.IsEmailUnique(@Email)", new { email });
     }
 
-    public Task<bool> IsUserNameUnique(string username)
+    public async Task<bool> IsUserNameUnique(string username)
     {
-        throw new NotImplementedException();
+        using var connection = _sqlConnection.CreateConnection();
+        return await connection.QuerySingleAsync<bool>("SELECT dbo.IsUserNameUnique(@Username)", new { username });
     }
 
     public async Task<User?> LoginUser(string email, string password)

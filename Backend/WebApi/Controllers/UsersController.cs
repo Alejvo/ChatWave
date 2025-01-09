@@ -14,7 +14,7 @@ using Shared;
 namespace WebApi.Controllers
 {
     [Route("api/users")]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ApiController
     {
         private readonly ISender _sender;

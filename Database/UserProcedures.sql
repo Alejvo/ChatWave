@@ -111,3 +111,33 @@ AS
 BEGIN
 	DELETE FROM Users WHERE Id = @Id
 END
+
+CREATE FUNCTION IsUserNameUnique(@Username VARCHAR(200))
+RETURNS BIT
+AS
+BEGIN 
+	DECLARE @Result BIT;
+	SELECT @Result = CASE 
+		WHEN COUNT(*) > 0 THEN 0
+		ELSE 1
+		END
+		FROM Users 
+		WHERE UserName = @Username
+
+		RETURN @Result;
+END
+
+CREATE FUNCTION IsEmailUnique(@Email VARCHAR(200))
+RETURNS BIT
+AS
+BEGIN 
+	DECLARE @Result BIT;
+	SELECT @Result = CASE 
+		WHEN COUNT(*) > 0 THEN 0
+		ELSE 1
+		END
+		FROM Users 
+		WHERE Email = @Email
+
+		RETURN @Result;
+END
