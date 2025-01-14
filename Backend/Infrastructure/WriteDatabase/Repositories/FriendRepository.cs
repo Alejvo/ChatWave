@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using Domain.Friends;
 using Domain.Users;
-using Infrastructure.Factories;
+using Infrastructure.WriteDatabase.Factories;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.WriteDatabase.Repositories;
 
 public class FriendRepository : IFriendRepository
 {
@@ -35,7 +35,7 @@ public class FriendRepository : IFriendRepository
     public async Task MakeFriendRequest(FriendRequest request)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.MakeFriendRequest, request );
+        await connection.QueryAsync(FriendProcedures.MakeFriendRequest, request);
     }
 
     public async Task RemoveFriend(string userId, string friendId)

@@ -2,10 +2,10 @@
 using Domain.Friends;
 using Domain.Groups;
 using Domain.Users;
-using Infrastructure.Factories;
+using Infrastructure.WriteDatabase.Factories;
 using System.Data;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.WriteDatabase.Repositories;
 
 public class UserRepository : IUserRepository
 {
@@ -54,12 +54,12 @@ public class UserRepository : IUserRepository
                 }
                 if (group != null && !userEntry.Groups.Any(g => g.Id == group.Id))
                 {
-                    var newGroup = Group.Create(group.Id,group.Name,group.Description,group.Image);
+                    var newGroup = Group.Create(group.Id, group.Name, group.Description, group.Image);
                     userEntry.Groups.Add(newGroup);
                 }
                 if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
                 {
-                    var newFriend = User.Create(friend.Id,friend.Username,friend.ProfileImage);
+                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
                     userEntry.Friends.Add(newFriend);
                 }
                 return userEntry;
@@ -87,7 +87,7 @@ public class UserRepository : IUserRepository
                 }
                 if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
                 {
-                    var newGroup = Group.Create(group.Id,group.Name,group.Description,group.Image);
+                    var newGroup = Group.Create(group.Id, group.Name, group.Description, group.Image);
                     userEntry.Groups.Add(newGroup);
                 }
                 if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))

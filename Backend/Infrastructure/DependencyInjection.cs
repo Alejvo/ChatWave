@@ -4,7 +4,7 @@ using Domain.Messages;
 using Domain.Tokens;
 using Domain.Users;
 using Infrastructure.Factories;
-using Infrastructure.Repositories;
+using Infrastructure.WriteDatabase.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

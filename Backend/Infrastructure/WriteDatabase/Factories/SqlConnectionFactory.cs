@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace Infrastructure.Factories;
+namespace Infrastructure.WriteDatabase.Factories;
 
 public class SqlConnectionFactory
 {

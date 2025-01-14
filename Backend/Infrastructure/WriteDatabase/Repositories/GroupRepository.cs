@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using Domain.Groups;
-using Infrastructure.Factories;
+using Infrastructure.WriteDatabase.Factories;
 using System.Data;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.WriteDatabase.Repositories;
 
 public class GroupRepository : IGroupRepository
 {
@@ -79,7 +79,7 @@ public class GroupRepository : IGroupRepository
             commandType: CommandType.StoredProcedure);
         if (result > 0) return true;
         else return false;
-        }
+    }
 
     public async Task UpdateAsync(GroupRequest group)
     {

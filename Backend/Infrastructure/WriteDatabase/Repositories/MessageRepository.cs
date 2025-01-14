@@ -1,10 +1,10 @@
 ﻿using Dapper;
 using Domain.Messages;
-using Infrastructure.Factories;
+using Infrastructure.WriteDatabase.Factories;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.WriteDatabase.Repositories;
 
 public class MessageRepository : IMessageRepository
 {

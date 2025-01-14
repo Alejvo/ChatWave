@@ -1,9 +1,9 @@
 ﻿using Dapper;
 using Domain.Tokens;
-using Infrastructure.Factories;
+using Infrastructure.WriteDatabase.Factories;
 using System.Data;
 
-namespace Infrastructure.Repositories;
+namespace Infrastructure.WriteDatabase.Repositories;
 
 public class TokenRepository : ITokenRepository
 {
