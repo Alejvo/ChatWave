@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Groups;
+using Domain.Groups.Events;
 using Shared;
 
 namespace Application.Groups.Create;
@@ -7,10 +8,12 @@ namespace Application.Groups.Create;
 internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCommand>
 {
     private readonly IGroupRepository _groupRepository;
+    private readonly IEventStore _eventStore;
 
-    public CreateGroupCommandHandler(IGroupRepository groupRepository)
+    public CreateGroupCommandHandler(IGroupRepository groupRepository, IEventStore eventStore)
     {
         _groupRepository = groupRepository;
+        _eventStore = eventStore;
     }
 
     public async Task<Result> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
@@ -25,8 +28,11 @@ internal sealed class CreateGroupCommandHandler : ICommandHandler<CreateGroupCom
             }
         }
         var group = GroupRequest.Create(request.Name,request.Description,imageBytes);
+        var groupCreated = new GroupCreatedEvent(group.Id,group.Name,group.Description);
 
         await _groupRepository.CreateAsync(group);
+        await _eventStore.SaveEventAsync(groupCreated,EntityType.Group);
+
         return Result.Success();
     }
 }

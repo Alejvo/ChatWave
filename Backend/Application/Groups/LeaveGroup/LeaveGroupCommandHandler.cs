@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Groups;
+using Domain.Groups.Events;
 using Domain.Users;
 using Shared;
 
@@ -9,11 +10,13 @@ internal sealed class LeaveGroupCommandHandler : ICommandHandler<LeaveGroupComma
 {
     private readonly IGroupRepository _groupRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IEventStore _eventStore;
 
-    public LeaveGroupCommandHandler(IGroupRepository groupRepository, IUserRepository userRepository)
+    public LeaveGroupCommandHandler(IGroupRepository groupRepository, IUserRepository userRepository, IEventStore eventStore)
     {
         _groupRepository = groupRepository;
         _userRepository = userRepository;
+        _eventStore = eventStore;
     }
 
     public async Task<Result> Handle(LeaveGroupCommand request, CancellationToken cancellationToken)
@@ -27,6 +30,9 @@ internal sealed class LeaveGroupCommandHandler : ICommandHandler<LeaveGroupComma
         var result = await _groupRepository.Leave(request.GroupId , request.UserId);
         if (!result) return GroupErrors.UserIsNotInTheGroup(request.UserId);
 
+        var groupLeft = new GroupLeftEvent(group.Id, group.Name, group.Description, user.Id);
+
+        await _eventStore.SaveEventAsync(groupLeft,EntityType.Group);
         return Result.Success();
     }
 }

@@ -23,11 +23,9 @@ internal sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserComma
         if (user == null) return UserErrors.NotFound(request.Id);
         if (request.ProfileImage != null)
         {
-            using (var memoryStream = new MemoryStream())
-            {
-                await request.ProfileImage.CopyToAsync(memoryStream);
-                profileImageBytes = memoryStream.ToArray();
-            }
+            using var memoryStream = new MemoryStream();
+            await request.ProfileImage.CopyToAsync(memoryStream, cancellationToken);
+            profileImageBytes = memoryStream.ToArray();
         }
 
         var updatedUser = UserRequest.Create(
@@ -38,13 +36,14 @@ internal sealed class UpdateUserCommandHandler : ICommandHandler<UpdateUserComma
             request.Password,
             request.Birthday,
             request.Username,
-           profileImageBytes
+           profileImageBytes!
             );
 
         var userUpdated = new UserUpdatedEvent(updatedUser.Id,$"{updatedUser.FirstName} {updatedUser.LastName}",updatedUser.Email,updatedUser.Username);
 
         await _userRepository.UpdateAsync(updatedUser);
         await _eventStore.SaveEventAsync(userUpdated, EntityType.User);
+
         return Result.Success();
     }
 }

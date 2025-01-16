@@ -18,7 +18,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            GroupProcedures.CreateGroup,
+            GroupProcedures.CreateGroup.ToString(),
             group,
             commandType: CommandType.StoredProcedure);
     }
@@ -27,7 +27,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            GroupProcedures.DeleteGroup,
+            GroupProcedures.DeleteGroup.ToString(),
             new { id },
             commandType: CommandType.StoredProcedure
         );
@@ -36,7 +36,7 @@ public class GroupRepository : IGroupRepository
     public async Task<IEnumerable<Group>> GetAll()
     {
         using var connection = _sqlConnection.CreateConnection();
-        return await connection.QueryAsync<Group>(GroupProcedures.GetGroups);
+        return await connection.QueryAsync<Group>(GroupProcedures.GetGroups.ToString());
     }
 
     public async Task<Group?> GetById(string id)
@@ -44,7 +44,7 @@ public class GroupRepository : IGroupRepository
         using var connection = _sqlConnection.CreateConnection();
         return await connection.QueryFirstOrDefaultAsync<Group>
             (
-                GroupProcedures.GetGroupById,
+                GroupProcedures.GetGroupById.ToString(),
                 new { id },
                 commandType: CommandType.StoredProcedure
             );
@@ -54,7 +54,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         return await connection.QueryAsync<Group>(
-            GroupProcedures.GetGroupsName,
+            GroupProcedures.GetGroupsName.ToString(),
             new { name },
             commandType: CommandType.StoredProcedure);
     }
@@ -63,7 +63,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         var result = await connection.ExecuteAsync(
-            GroupProcedures.JoinGroup,
+            GroupProcedures.JoinGroup.ToString(),
             new { groupId, userId },
             commandType: CommandType.StoredProcedure);
         if (result > 0) return true;
@@ -74,7 +74,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         var result = await connection.ExecuteAsync(
-            GroupProcedures.LeaveGroup,
+            GroupProcedures.LeaveGroup.ToString(),
             new { groupId, userId },
             commandType: CommandType.StoredProcedure);
         if (result > 0) return true;
@@ -85,7 +85,7 @@ public class GroupRepository : IGroupRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            GroupProcedures.UpdateGroup,
+            GroupProcedures.UpdateGroup.ToString(),
             group,
             commandType: CommandType.StoredProcedure);
     }
