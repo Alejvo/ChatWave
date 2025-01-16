@@ -49,7 +49,7 @@ public class UserRepository : IUserRepository
                 {
                     userEntry = user;
                     userEntry.Groups = new List<Group>();
-                    userEntry.Friends = new List<User>();
+                    userEntry.Friends = new List<Friend>();
                     userDictionary.Add(userEntry.Id, userEntry);
                 }
                 if (group != null && !userEntry.Groups.Any(g => g.Id == group.Id))
@@ -59,7 +59,14 @@ public class UserRepository : IUserRepository
                 }
                 if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
                 {
-                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
+                    var newFriend = new Friend
+                    {
+                        Id = friend.Id,
+                        FirstName = friend.FirstName,
+                        LastName = friend.LastName,
+                        Username = friend.Username,
+                        ProfileImage = friend.ProfileImage
+                    };
                     userEntry.Friends.Add(newFriend);
                 }
                 return userEntry;
@@ -82,7 +89,7 @@ public class UserRepository : IUserRepository
                 {
                     userEntry = user;
                     userEntry.Groups = new List<Group>();
-                    userEntry.Friends = new List<User>();
+                    userEntry.Friends = new List<Friend>();
                     userDictionary.Add(userEntry.Id, userEntry);
                 }
                 if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
@@ -92,7 +99,14 @@ public class UserRepository : IUserRepository
                 }
                 if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
                 {
-                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
+                    var newFriend = new Friend
+                    {
+                        Id = friend.Id,
+                        FirstName =  friend.FirstName,
+                        LastName = friend.LastName,
+                        Username = friend.Username,
+                        ProfileImage = friend.ProfileImage
+                    };
 
                     userEntry.Friends.Add(newFriend);
                 }
@@ -117,7 +131,7 @@ public class UserRepository : IUserRepository
                 {
                     userEntry = user;
                     userEntry.Groups = new List<Group>();
-                    userEntry.Friends = new List<User>();
+                    userEntry.Friends = new List<Friend>();
                     userDictionary.Add(userEntry.Id, userEntry);
                 }
                 if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
@@ -127,7 +141,14 @@ public class UserRepository : IUserRepository
                 }
                 if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
                 {
-                    var newFriend = User.Create(friend.Id, friend.Username, friend.ProfileImage);
+                    var newFriend = new Friend
+                    {
+                        Id = friend.Id,
+                        FirstName = friend.FirstName,
+                        LastName = friend.LastName,
+                        Username = friend.Username,
+                        ProfileImage = friend.ProfileImage
+                    };
                     userEntry.Friends.Add(newFriend);
                 }
                 return userEntry;

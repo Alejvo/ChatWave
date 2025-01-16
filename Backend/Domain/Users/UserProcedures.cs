@@ -10,5 +10,5 @@ public static class UserProcedures
     public const string DeleteUser = "DeleteUser";
     public const string LoginUser = "LoginUser";
     public const string IsEmailUnique = "IsEmailUnique";
-    public const string IsUserNameUniqu = "IsUserNameUniqu";
+    public const string IsUserNameUnique = "IsUserNameUnique";
 }

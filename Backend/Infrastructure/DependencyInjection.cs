@@ -3,10 +3,12 @@ using Domain.Groups;
 using Domain.Messages;
 using Domain.Tokens;
 using Domain.Users;
-using Infrastructure.Factories;
+using Infrastructure.ReadDatabase;
+using Infrastructure.WriteDatabase.Factories;
 using Infrastructure.WriteDatabase.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared;
 
 namespace Infrastructure;
 
@@ -29,6 +31,8 @@ public static class DependencyInjection
         services.AddScoped<IMessageRepository,MessageRepository>();
         services.AddScoped<ITokenRepository,TokenRepository>();
         services.AddScoped<IFriendRepository,FriendRepository>();
+
+        services.AddScoped<IEventStore,EventStore>();
 
         return services;
     }

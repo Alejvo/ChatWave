@@ -9,8 +9,11 @@ services:
       - "5000:8080"
     environment:
       - ConnectionStrings__Default=Server=db,1433;Database=ChatWave;User Id=sa;Password=Strong_Password;TrustServerCertificate=true
+      - MongoDBSettings__ConnectionString=mongodb://mongo:27017
+      - MongoDBSettings__DatabaseName=ChatWaveEventsDB
     depends_on:
       - db
+      - mongo
     networks:
       - chatwave-network
 
@@ -27,8 +30,20 @@ services:
     volumes:
       - chatwave_data:/var/opt/mssql
 
+  mongo:
+    image: mongo:6.0
+    container_name: chatwave.mongo
+    ports:
+      - "27018:27017"
+    networks:
+      - chatwave-network
+    volumes:
+      - mongo_data:/data/db
+
 volumes:
   chatwave_data:
+    driver: local
+  mongo_data:
     driver: local
 
 networks:

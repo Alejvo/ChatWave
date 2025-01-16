@@ -1,10 +1,12 @@
-﻿using Domain.Groups;
+﻿using Domain.Friends;
+using Domain.Groups;
+using Domain.Users.Events;
+using Shared;
 
 namespace Domain.Users;
 
-public sealed class User
+public sealed class User : Aggregate
 {
-    public string Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
@@ -13,9 +15,10 @@ public sealed class User
     public string Username { get; set; }
     public byte[] ProfileImage { get; set; }
     public List<Group> Groups { get; set; } = new List<Group>();
-    public List<User> Friends { get; set; } = new List<User>();
+    public List<Friend> Friends { get; set; } = new List<Friend>();
 
     private User(string id, string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
+        :base(id)
     {
         Id = id;
         FirstName = firstName;
@@ -27,26 +30,8 @@ public sealed class User
         ProfileImage = profileImage;
     }
 
-    private User(string id, string username, byte[] profileImage)
-    {
-        Id = id;
-        Username = username;
-        ProfileImage = profileImage;
-    }
-
     private User()
     {
     }
 
-    public static User Create(string id,string firstName, string lastName, string email, string password, DateTime birthday, string username, byte[] profileImage)
-    {
-        var user = new User(id,firstName,lastName,email,password,birthday,username,profileImage);
-        return user;
-    }
-
-    public static User Create(string id,string username, byte[] profileImage)
-    {
-        var user = new User(id, username,profileImage);
-        return user;
-    }
 }
