@@ -17,13 +17,13 @@ public class FriendRepository : IFriendRepository
     public async Task AddFriend(string userId, string friendId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.AddFriend, new { userId, friendId });
+        await connection.QueryAsync(FriendProcedures.AddFriend.ToString(), new { userId, friendId });
     }
 
     public async Task<IEnumerable<Friend>> GetFriendRequests(string userId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        return await connection.QueryAsync<Friend>(FriendProcedures.GetFriendRequests, new { userId });
+        return await connection.QueryAsync<Friend>(FriendProcedures.GetFriendRequests.ToString(), new { userId });
     }
 
     public async Task<bool> IsUserYourFriend(string userId, string friendId)
@@ -35,12 +35,12 @@ public class FriendRepository : IFriendRepository
     public async Task MakeFriendRequest(FriendRequest request)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.MakeFriendRequest, request);
+        await connection.QueryAsync(FriendProcedures.MakeFriendRequest.ToString(), request);
     }
 
     public async Task RemoveFriend(string userId, string friendId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.RemoveFriend, new { userId, friendId });
+        await connection.QueryAsync(FriendProcedures.RemoveFriend.ToString(), new { userId, friendId });
     }
 }

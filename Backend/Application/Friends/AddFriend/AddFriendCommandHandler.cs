@@ -1,5 +1,6 @@
 ﻿using Application.Abstractions;
 using Domain.Friends;
+using Domain.Friends.Events;
 using Domain.Messages;
 using Domain.Users;
 using Shared;
@@ -10,11 +11,13 @@ internal sealed class AddFriendCommandHandler : ICommandHandler<AddFriendCommand
 {
     private readonly IFriendRepository _friendRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IEventStore _eventStore;
 
-    public AddFriendCommandHandler(IFriendRepository friendRepository, IUserRepository userRepository)
+    public AddFriendCommandHandler(IFriendRepository friendRepository, IUserRepository userRepository, IEventStore eventStore)
     {
         _friendRepository = friendRepository;
         _userRepository = userRepository;
+        _eventStore = eventStore;
     }
 
     public async Task<Result> Handle(AddFriendCommand request, CancellationToken cancellationToken)
@@ -28,7 +31,10 @@ internal sealed class AddFriendCommandHandler : ICommandHandler<AddFriendCommand
         var isYourFriend = await _friendRepository.IsUserYourFriend(request.UserId, request.FriendId);
         if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(request.UserId));
 
+        var friendAdded = new FriendAddedEvent(user.Id,friend.Id);
         await _friendRepository.AddFriend(request.UserId, request.FriendId);
+        await _eventStore.SaveEventAsync(friendAdded,EntityType.Friend);
+
         return Result.Success();
     }
 }
