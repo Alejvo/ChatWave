@@ -1,0 +1,11 @@
+# Exclude node_modules (already included in the Dockerfile)
+node_modules/
+
+# Exclude build artifacts
+dist/
+
+# Exclude development-specific files
+.git/
+.gitignore
+.editorconfig
+.vscode/

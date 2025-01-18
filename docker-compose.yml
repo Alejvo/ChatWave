@@ -1,5 +1,17 @@
 version: "3.8"
 services:
+  frontend:
+    container_name: chatwave.frontend
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:80"
+    depends_on:
+      - api
+    networks:
+      - chatwave-network
+
   api:
     container_name: chatwave.api
     build:
