@@ -1,7 +1,7 @@
 ﻿namespace Domain.Tokens;
 
-public static class TokenProcedures
+public enum TokenProcedures
 {
-    public const string GetToken = "GetToken";
-    public const string SaveToken = "SaveToken";
+    GetToken,
+    SaveToken
 }

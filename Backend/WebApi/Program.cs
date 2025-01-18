@@ -6,15 +6,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using Serilog;
 using System.Text;
 using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Host.UseSerilog((context,loggerConfig)=>
+    loggerConfig.ReadFrom.Configuration(context.Configuration));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.Configure<MongoDBSettings>(
@@ -104,7 +105,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<RequestLogContextMiddleware>();
+
 app.UseErrorHandlingMiddleware();
+app.UseSerilogRequestLogging();
 
 app.MapHub<ChatHub>("/chatHub");
 

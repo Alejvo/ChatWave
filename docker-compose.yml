@@ -51,6 +51,17 @@ services:
       - chatwave-network
     volumes:
       - mongo_data:/data/db
+   
+  seq:
+    container_name: chatwave.seq
+    image: datalust/seq:latest
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:5341
+      - 8081:80
+    networks:
+      - chatwave-network
 
 volumes:
   chatwave_data:

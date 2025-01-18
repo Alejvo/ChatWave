@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            UserProcedures.CreateUser,
+            UserProcedures.CreateUser.ToString(),
             user,
             commandType: CommandType.StoredProcedure);
     }
@@ -30,7 +30,7 @@ public class UserRepository : IUserRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            UserProcedures.DeleteUser,
+            UserProcedures.DeleteUser.ToString(),
             new { id },
             commandType: CommandType.StoredProcedure
         );
@@ -41,7 +41,7 @@ public class UserRepository : IUserRepository
         using var connection = _sqlConnection.CreateConnection();
         var userDictionary = new Dictionary<string, User>();
         await connection.QueryAsync<User, Group, User, User>(
-            UserProcedures.GetUsers,
+            UserProcedures.GetUsers.ToString(),
             (user, group, friend) =>
             {
 
@@ -82,7 +82,7 @@ public class UserRepository : IUserRepository
         using var connection = _sqlConnection.CreateConnection();
         var userDictionary = new Dictionary<string, User>();
         await connection.QueryAsync<User, Group, User, User>(
-            UserProcedures.GetUserById,
+            UserProcedures.GetUserById.ToString(),
             (user, group, friend) =>
             {
                 if (!userDictionary.TryGetValue(user.Id, out var userEntry))
@@ -124,7 +124,7 @@ public class UserRepository : IUserRepository
         using var connection = _sqlConnection.CreateConnection();
         var userDictionary = new Dictionary<string, User>();
         await connection.QueryAsync<User, Group, User, User>(
-            UserProcedures.GetUsersByUsername,
+            UserProcedures.GetUsersByUsername.ToString(),
             (user, group, friend) =>
             {
                 if (!userDictionary.TryGetValue(user.Id, out var userEntry))
@@ -176,7 +176,7 @@ public class UserRepository : IUserRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         var user = await connection.QuerySingleOrDefaultAsync<User>(
-            UserProcedures.LoginUser,
+            UserProcedures.LoginUser.ToString(),
             new { email, password },
             commandType: CommandType.StoredProcedure);
         return user;
@@ -186,7 +186,7 @@ public class UserRepository : IUserRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            UserProcedures.UpdateUser,
+            UserProcedures.UpdateUser.ToString(),
             user,
             commandType: CommandType.StoredProcedure);
     }

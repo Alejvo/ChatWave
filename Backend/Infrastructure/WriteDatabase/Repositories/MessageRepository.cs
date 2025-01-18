@@ -19,7 +19,7 @@ public class MessageRepository : IMessageRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         return await connection.QueryAsync<GroupMessage>(
-                MessageProcedures.GetGroupMessages,
+                MessageProcedures.GetGroupMessages.ToString(),
                 param: new { GroupId = group },
                 commandType: CommandType.StoredProcedure
             );
@@ -30,7 +30,7 @@ public class MessageRepository : IMessageRepository
         using var connection = _sqlConnection.CreateConnection();
 
         return await connection.QueryAsync<UserMessage>(
-                MessageProcedures.GetUserMessages,
+                MessageProcedures.GetUserMessages.ToString(),
                 param: new { ReceiverId = receiver, SenderId = sender },
                 commandType: CommandType.StoredProcedure
             );
@@ -40,7 +40,7 @@ public class MessageRepository : IMessageRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-             MessageProcedures.SendToGroup,
+             MessageProcedures.SendMessageToGroup.ToString(),
              message,
              commandType: CommandType.StoredProcedure
             );
@@ -50,7 +50,7 @@ public class MessageRepository : IMessageRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-             MessageProcedures.SendToUser,
+             MessageProcedures.SendMessageToUser.ToString(),
              message,
              commandType: CommandType.StoredProcedure
             );

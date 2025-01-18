@@ -17,7 +17,7 @@ public class TokenRepository : ITokenRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         return await connection.QueryFirstOrDefaultAsync<Token>(
-            TokenProcedures.GetToken,
+            TokenProcedures.GetToken.ToString(),
             new { token },
             commandType: CommandType.StoredProcedure);
     }
@@ -26,7 +26,7 @@ public class TokenRepository : ITokenRepository
     {
         using var connection = _sqlConnection.CreateConnection();
         await connection.ExecuteAsync(
-            TokenProcedures.SaveToken,
+            TokenProcedures.SaveToken.ToString(),
             new { token.UserId, Token = token.JwtToken, token.Id, token.ExpiryTime },
             commandType: CommandType.StoredProcedure);
     }
