@@ -1,0 +1,46 @@
+<div class="register-overlay" *ngIf="isVisible" (click)="closeModal()"></div>
+<div class="register-content" *ngIf="isVisible">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <p class="register-title">Sign Up</p>
+    <p class="register-subtitle">It will only take a minute</p>
+    <hr>
+    <form class="register-form" #registerForm="ngForm" (ngSubmit)="createUser()">
+        <div class="register-input" id="firstnameInput">
+            <label for="firstname">Firstname</label>
+            <input type="text" id="firstname" name="firstname" [(ngModel)]="registerUser.firstname" required>
+        </div>
+        <div class="register-input" id="lastnameInput">
+            <label for="lastname">Lastname</label>
+            <input type="text" id="lastname" name="lastname" [(ngModel)]="registerUser.lastname" required>
+        </div>
+        <div class="register-input" id="usernameInput">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" [(ngModel)]="registerUser.username" required>
+        </div>
+        <div class="register-input" id="emailInput">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" [(ngModel)]="registerUser.email" required>
+        </div>
+        <div class="register-input" id="passwordInput">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" [(ngModel)]="registerUser.password" required>
+        </div>
+        <div id="birthdayInput" class="birthday-container">
+            <span>Birthday</span>
+            <div class="register-select">
+                <select name="day" id="day" [(ngModel)]="registerUser.birthday.day" required>
+                    <option *ngFor="let day of days" [value]="day">{{day}}</option>
+                </select>
+                <select name="month" id="month" [(ngModel)]="registerUser.birthday.month" required>
+                    <option *ngFor="let month of months" [value]="month">{{month}}</option>
+                </select>
+                <select name="year" id="year" [(ngModel)]="registerUser.birthday.year" required>
+                    <option *ngFor="let year of years" [value]="year">{{year}}</option>
+                </select>
+            </div>
+        </div>
+        <input type="submit" class="register-button" id="button" value="Create Account"
+            [disabled]="!registerForm.valid || !isDateValid()">
+    </form>
+</div>
+
