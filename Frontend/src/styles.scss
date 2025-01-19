@@ -1,1 +1,36 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+$DimGray: #2E2E2E;
+$LighterDimGray: #3F3F3F;
+$Black: #000;
+$White: #FFF;
+$LightGreen: #D4EDDA;
+$LightGray: #D3D3D3;
+$Green: #28A745;
+$DarkGray: #343A40;
+$DarkGreen: #155724;
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: $DimGray;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

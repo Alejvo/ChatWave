@@ -1,0 +1,21 @@
+@import '../../../../styles.scss';
+
+footer {
+    background-color: $DarkGray;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
+
+    @media screen and (max-width:800px) {
+        position: absolute;
+        bottom: 0;
+    }
+
+    p {
+        color: $White;
+        font-size: 18px;
+    }
+}

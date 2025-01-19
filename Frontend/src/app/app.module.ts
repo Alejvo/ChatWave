@@ -4,16 +4,24 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { HomeComponent } from './pages/home/home.component';
+import { SharedModule } from "./shared/shared.module";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatIconModule } from '@angular/material/icon';
+ 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
-  ],
+    HttpClientModule,
+    SharedModule,
+    BrowserAnimationsModule,
+    MatIconModule
+],
   providers: [],
   bootstrap: [AppComponent]
 })
