@@ -1,0 +1,15 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="closeModal()"></div>
+<div class="modal-content" *ngIf="isVisible">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <p class="title">Create A Group</p>
+    <form class="form" #createGroupForm="ngForm" (ngSubmit)="createGroup()">
+        <label for="name" class="form-label">Name:
+        </label>
+        <input [(ngModel)]="groupRequest.name" name="name" class="form-input" id="name">
+        <label for="description" class="form-label">Description:</label>
+        <textarea name="description" class="form-textarea" id="descrption"
+            [(ngModel)]="groupRequest.description"></textarea>
+        <input type="submit" value="Create Group" class="form-button">
+    </form>
+</div>
+

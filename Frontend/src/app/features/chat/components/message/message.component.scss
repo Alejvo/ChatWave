@@ -1,0 +1,52 @@
+@import '../../../../../styles.scss';
+
+.message {
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+
+    .message-body {
+        word-break: break-word;
+        //border-radius: 5px;
+        width: 500px;
+        height: auto;
+        padding: 5px 10px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+
+        .message-text {
+            font-size: 20px;
+            text-align: left;
+        }
+    }
+
+    &.received {
+        justify-content: flex-start;
+
+        .message-body {
+            box-shadow: -4px 4px 5px rgba(174, 174, 174, 0.4);
+            background-color: $LightGray;
+
+        }
+    }
+
+    &.sended {
+        justify-content: flex-end;
+
+        .message-body {
+            box-shadow: 4px 4px 5px rgba(174, 174, 174, 0.4);
+            background-color: $LightGreen; // Color para mensajes enviados
+        }
+    }
+
+
+    @media screen and (max-width:800px) {
+        & {
+            .message-body {
+                width: 300px;
+            }
+        }
+    }
+}

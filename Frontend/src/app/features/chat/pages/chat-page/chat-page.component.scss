@@ -1,0 +1,299 @@
+@import '../../../../../styles.scss';
+
+.chat-container {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-areas:
+        "contacts options options options options"
+        "contacts messages messages messages messages"
+        "contacts messages messages messages messages"
+        "contacts sendInput sendInput sendInput sendInput";
+    grid-template-columns: 350px 1fr 1fr 1fr 1fr;
+    grid-template-rows: 60px 1fr 1fr 70px;
+
+    @media screen and (max-width:800px) {
+        & {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+    }
+}
+
+app-options {
+    grid-area: options;
+    order: 1;
+}
+
+.messages-list {
+
+    order: 2;
+    grid-area: messages;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 20px;
+    background-color: transparent;
+    overflow: auto;
+    scrollbar-width: none;
+
+    @media screen and (max-width:800px) {
+        & {
+            margin-top: 60px;
+            //margin-bottom: 70px;
+            flex-grow: 20;
+        }
+    }
+}
+
+
+.contacts-list {
+    height: 100vh;
+    z-index: 100;
+    grid-area: contacts;
+    justify-content: center;
+    display: flex;
+    gap: 10px 0 10px 0;
+    flex-direction: column;
+    background-color: $DimGray;
+    padding: 20px 10px 10px 10px;
+
+    .contacts-bars {
+        min-width: 100%;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 40px;
+        color: $White;
+
+    }
+
+    .contacts-search {
+        padding: 5px;
+        display: flex;
+        flex-direction: row-reverse;
+        //width: 20px;
+        //height: 20px;
+        border-radius: 5px;
+        background-color: $LightGray;
+
+        .contacts-input {
+            margin-left: 5px;
+            outline: none;
+            font-size: 15px;
+            background-color: transparent;
+            border: none;
+            width: 90%;
+        }
+    }
+
+    .contacts-container {
+        margin-top: 10px;
+        overflow: auto;
+        scrollbar-width: none;
+
+        .friends-accordion {
+            flex-grow: 1;
+            margin-top: 5px;
+            overflow: auto;
+            scrollbar-width: none;
+
+            .friends-header {
+                display: flex;
+                flex-direction: row;
+                font-size: 20px;
+                color: white;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px 0 10px;
+
+                .friends-text {
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .friends-button {
+                    background-color: transparent;
+                    border: none;
+                    color: $White;
+                    min-height: 30px;
+                    min-width: 30px;
+
+                    .mat-icon {
+                        font-size: 30px;
+                        min-height: 30px;
+                        min-width: 30px;
+                    }
+                }
+            }
+
+            &.closed {
+                .friends-container {
+                    display: none;
+                }
+
+                .friends-button {
+                    transform: rotate(90deg);
+                }
+            }
+
+            &.opened {
+                .friends-container {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+            }
+        }
+
+        .groups-accordion {
+            flex-grow: 1;
+            overflow: auto;
+            scrollbar-width: none;
+            margin-top: 5px;
+
+            .groups-header {
+                display: flex;
+                flex-direction: row;
+                font-size: 20px;
+                color: white;
+                justify-content: space-between;
+                padding: 0 20px 0 10px;
+
+                .groups-text {
+                    text-align: center;
+                    font-weight: bold;
+                }
+
+                .groups-button {
+                    background-color: transparent;
+                    border: none;
+                    color: $White;
+                    min-height: 30px;
+                    min-width: 30px;
+
+                    .mat-icon {
+                        font-size: 30px;
+                        min-height: 30px;
+                        min-width: 30px;
+                    }
+                }
+            }
+
+            &.closed {
+                .groups-container {
+                    display: none;
+                }
+
+                .groups-button {
+                    transform: rotate(90deg);
+                }
+            }
+
+            &.opened {
+                .groups-container {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+
+    }
+
+    .contacts-personalInfo {
+        margin-top: auto;
+        background-color: $DarkGray;
+
+    }
+
+    @media screen and (max-width:800px) {
+        & {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 70%;
+            max-width: 450px;
+            height: 100vh;
+            z-index: 100;
+            transition: all 0.5s ease-out;
+            transform: translateX(-100%);
+        }
+
+        &.active {
+            transform: translateX(0);
+        }
+
+        &.inactive {
+            transform: translateX(-100%);
+        }
+
+    }
+}
+
+.send-message {
+
+    order: 3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    gap: 10px;
+    //background-color: $LighterDimGray;
+    grid-area: sendInput;
+    padding: 10px 20px;
+
+    //height: 50px;
+    //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    .send-message-input {
+        flex-grow: 1;
+        height: 50px;
+        outline: none;
+        background-color: $DimGray;
+        overflow: visible;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 15px;
+        font-size: 20px;
+        color: $White;
+        resize: none;
+    }
+
+    .send-icon {
+        min-height: 50px;
+        min-width: 50px;
+        display: flex;
+        color: $White;
+        border-radius: 10px;
+        background-color: $DimGray;
+        font-size: 25px;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            color: $DimGray;
+            background-color: $White;
+        }
+
+        &:active {
+            background-color: $LightGray;
+        }
+    }
+
+    @media screen and (max-width:800px) {
+        & {
+            width: auto;
+            position: fixed;
+            bottom: 0;
+            left: 0px;
+            right: 0px;
+            margin-top: auto;
+            z-index: 10;
+
+        }
+    }
+
+}

@@ -1,0 +1,21 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="closeModal()"></div>
+<div class="modal-content" *ngIf="isVisible">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="modal-search">
+        <input #nameInput placeholder="Find a user" class="search-input" (keyup.enter)="filterGroups(nameInput.value)">
+        <div class="search-icon" (click)="filterGroups(nameInput.value)">
+            <mat-icon>search</mat-icon>
+        </div>
+    </div>
+    <div class="search-result">
+        <div class="result-info" *ngFor="let item of groups">
+            <div class="result-content">
+                <div class="result-image">
+                </div>
+                <div class="result-title">{{item.name}}</div>
+            </div>
+            <button class="result-button" (click)="joinGroup(item.id)">Join</button>
+        </div>
+    </div>
+</div>
+

@@ -1,13 +1,13 @@
 <nav class="header">
     <p class="header-logo">ChatWave</p>
-    <ul class="header-list">
+    <ul class="header-list" [ngClass]="{'active':IsOpened}">
         <li class="header-item">Community</li>
         <li class="header-item">Donwload</li>
-        <li class="header-item filled-button" routerLink="/auth/login">Sign In</li>
-        <li class="header-item filled-button">Open Chat</li>
-        <li class="header-item filled-button">Log Out</li>
+        <li *ngIf="!authService.isLoggedIn()" class="header-item filled-button" routerLink="/auth/login">Sign In</li>
+        <li *ngIf="authService.isLoggedIn()" class="header-item filled-button" (click)="openChat()">Open Chat</li>
+        <li *ngIf="authService.isLoggedIn()" class="header-item filled-button" (click)="onLogOut()">Log Out</li>
     </ul>
-    <button class="header-bars">
+    <button class="header-bars" (click)="toggle()">
         <mat-icon>menu</mat-icon>
     </button>
 </nav>

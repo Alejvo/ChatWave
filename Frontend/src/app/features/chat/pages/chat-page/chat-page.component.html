@@ -1,0 +1,74 @@
+<div class="chat-container">
+
+    <div class="contacts-list" [ngClass]="{'active':isSideBarActive,'inactive':!isSideBarActive}">
+        <div class="contacts-search">
+            <input class="contacts-input" placeholder="Search" />
+            <mat-icon>search</mat-icon>
+        </div>
+        <div class="contacts-container">
+            <div class="friends-accordion"
+                [ngClass]="{'opened':isFriendsAccordionOpen,'closed':!isFriendsAccordionOpen}">
+                <div class="friends-header">
+                    <div class="friends-text">Friends</div>
+                    <button (click)="toggleFriendsAccordion()" class="friends-button">
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </button>
+                </div>
+                <ng-container *ngIf="user !== null; else noFriends">
+                    <div class="friends-container" *ngFor="let friend of user.friends">
+                        <app-contacts [Name]="friend.name" (messagesEvent)="loadHistory(friend.id,'friend')"
+                            [profilePhoto]="'data:image/png;base64,' + friend.profileImage"></app-contacts>
+                    </div>
+                </ng-container>
+
+                <ng-template #noFriends>
+                    <p [ngStyle]="{'color':'#fff','margin-left':'10px'}" class="friends-container">No friends yet</p>
+                </ng-template>
+            </div>
+            <div class="groups-accordion" [ngClass]="{'opened':isGroupsAccordionOpen,'closed':!isGroupsAccordionOpen}">
+                <div class="groups-header">
+                    <p class="groups-text">Groups</p>
+                    <button class="groups-button" (click)="toggleGroupsAccordion()">
+                        <mat-icon>keyboard_arrow_right</mat-icon>
+                    </button>
+                </div>
+                <ng-container *ngIf="user !== null; else noGroups">
+                    <div class="groups-container" *ngFor="let group of user.groups">
+                        <app-contacts [Name]="group.name" (messagesEvent)="loadHistory(group.id,'group')"
+                            [profilePhoto]="'data:image/png;base64,' + group.image"></app-contacts>
+                    </div>
+                </ng-container>
+
+                <ng-template #noGroups>
+                    <p [ngStyle]="{'color':'#fff','margin-left':'10px'}" class="groups-container">No Groups yet</p>
+                </ng-template>
+
+            </div>
+        </div>
+        <app-contacts [profilePhoto]="'data:image/png;base64,' + this.user?.profileImage" class="contacts-personalInfo"
+            [Name]="username"></app-contacts>
+    </div>
+
+    <div #messageContainer class="messages-list">
+        <ng-container *ngIf="messages && messages.length >0; else noMessages">
+            <ng-container *ngFor="let msg of messages">
+                <app-message [text]="msg.text" [isSended]="msg.status === 'Sent'">
+                </app-message>
+            </ng-container>
+        </ng-container>
+
+        <ng-template #noMessages>
+            <app-not-message></app-not-message>
+        </ng-template>
+    </div>
+    <app-options class="options" [appUser]="user" (toggle)="toggleMenu()"></app-options>
+
+    <div class="send-message">
+        <textarea id="newMessage" type="text" name="newMessage" [(ngModel)]="messageContent" class="send-message-input"
+            placeholder="Write your message" #messageInput="ngModel" (keyup.enter)="sendMessage()"></textarea>
+
+        <mat-icon class="send-icon" (click)="sendMessage()">send</mat-icon>
+
+    </div>
+</div>
+

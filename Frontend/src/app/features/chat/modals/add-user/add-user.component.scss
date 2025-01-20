@@ -1,0 +1,145 @@
+@import '../../../../../styles.scss';
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 300;
+}
+
+.modal-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: $LightGray;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 500;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    padding: 20px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .modal-search {
+        background-color: $DarkGray;
+        width: 100%;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: row;
+        padding: 5px 10px;
+
+        .search-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            mat-icon {
+                color: white;
+            }
+
+            &:hover,
+            &:active {
+                cursor: pointer;
+                background-color: $DimGray;
+                border-radius: 4px;
+            }
+        }
+
+        .search-input {
+            width: 100%;
+            border: none;
+            outline: none;
+            padding-left: 5px;
+            font-size: 18px;
+            color: white;
+            background-color: transparent;
+        }
+    }
+
+    .search-result {
+        width: 85%;
+        padding: 0 16px 0 0;
+        height: 400px;
+        overflow: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 15px 0;
+
+        .result-info {
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            background-color: $DarkGray;
+            padding: 20px;
+            gap: 20px;
+            color: $White;
+
+            .result-content {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .result-image {
+                    border-radius: 50%;
+                    background-color: $Green;
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 20px;
+                    overflow: hidden;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+            }
+
+            .result-title {
+                font-size: 20px;
+            }
+
+            .result-button {
+                margin: 0 auto;
+                width: 220px;
+                background-color: $Green;
+                border: none;
+                outline: none;
+                height: 40px;
+                padding: 10px;
+                color: $White;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 10px;
+                cursor: pointer;
+
+                &:hover,
+                &:active {
+                    background-color: $White;
+                    color: $Green;
+                }
+            }
+
+        }
+    }
+}
+
+.close {
+    cursor: pointer;
+    font-size: 36px;
+    color: $DarkGray;
+    margin-left: auto;
+}

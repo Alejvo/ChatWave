@@ -1,0 +1,22 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="closeModal()"></div>
+<div class="modal-content" *ngIf="isVisible">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="modal-search">
+
+        <input #userInput placeholder="Find a user" class="search-input" (keyup.enter)="filterUsers(userInput.value)">
+        <div class="search-icon" (click)="filterUsers(userInput.value)">
+            <mat-icon>search</mat-icon>
+        </div>
+    </div>
+    <div class="search-result">
+        <div class="result-info" *ngFor="let item of result">
+            <div class="result-content">
+                <div class="result-image">
+                    <img [src]="'data:image/png;base64,' + item.profileImage" alt="Profile Image" />
+                </div>
+                <div class="result-title">{{item.userName}}</div>
+            </div>
+            <button class="result-button" (click)="addFriend(item.id)">Add to Friend</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,144 @@
+@import '../../../../../styles.scss';
+
+.options {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 20px;
+    z-index: 100;
+    box-shadow: 0 4px 8px rgba(27, 27, 27, 0.5);
+    padding: 10px 30px;
+    background-color: $LighterDimGray;
+    //grid-area: options;
+    //height: 50px;
+
+    .icon {
+        transition: all 0.5s ease;
+        background-color: transparent;
+        border: none;
+        min-height: 40px;
+        min-width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        cursor: pointer;
+        position: relative;
+
+        .mat-icon {
+            margin: auto;
+            font-size: 30px;
+            min-height: 30px;
+            min-width: 30px;
+        }
+
+        .icon_tool-tip {
+            z-index: 500;
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            font-size: 12px;
+            font-weight: bold;
+            width: 90px;
+            border-radius: 5px;
+            padding: 5px;
+            text-align: center;
+            background-color: black;
+            color: white;
+            top: 120%;
+            left: 50%;
+            transform: translate(-50%);
+            transition: all 0.3s ease-in;
+
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                border-width: 5px;
+                border-style: solid;
+                border-color: transparent transparent black transparent;
+            }
+        }
+
+        &:hover {
+            border-radius: 5px;
+
+            //border: 1px solid $LightGray;
+            .icon_tool-tip {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            color: $DimGray;
+            background-color: $White;
+        }
+
+        &:active {
+            background-color: $DarkGray;
+            transition: backgroud 0.2s ease-out;
+        }
+
+        &:active {
+            background-color: $LightGray;
+            transition: backgroud 0.2s ease-out;
+        }
+    }
+
+    .config {
+        transition: all 0.5s ease;
+        min-height: 40px;
+        min-width: 40px;
+        display: flex;
+        color: white;
+        font-size: 30px;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+
+        &:hover {
+            border-radius: 5px;
+            //border: 1px solid $LightGray;
+            color: $DimGray;
+            background-color: $LightGray;
+        }
+
+        &:active {
+            background-color: $White;
+            transition: backgroud 0.2s ease-out;
+        }
+    }
+
+    .bars {
+        border: none;
+        background-color: transparent;
+        font-size: 40px;
+        color: $White;
+        margin-right: auto;
+        display: none;
+
+        .mat-icon {
+            font-size: 40px;
+            min-height: 40px;
+            min-width: 40px;
+        }
+    }
+
+    @media screen and (max-width:800px) {
+        & {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100%;
+        }
+
+        .bars {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+    }
+}
