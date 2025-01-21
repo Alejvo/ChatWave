@@ -9,7 +9,6 @@ public class MakeFriendRequestValidator : AbstractValidator<MakeFriendRequestCom
         RuleFor(friend => friend.FriendId).NotEmpty();
         RuleFor(friend => friend.SentAt)
             .GreaterThan(new DateTime(2024, 1, 1))
-            .LessThanOrEqualTo(DateTime.Now)
             .NotEmpty();
         RuleFor(friend => friend.UserId).NotEmpty();
     }

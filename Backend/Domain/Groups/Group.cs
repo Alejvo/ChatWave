@@ -1,4 +1,6 @@
-﻿namespace Domain.Groups;
+﻿using Domain.Friends;
+
+namespace Domain.Groups;
 
 public sealed class Group
 {

@@ -1,4 +1,4 @@
-CREATE PROCEDURE GetUsers
+ALTER PROCEDURE GetUsers
 AS
 BEGIN
 SELECT 
@@ -16,6 +16,8 @@ SELECT
 	g.Image,
 	fri.Id,
 	fri.UserName,
+	fri.FirstName,
+	fri.LastName,
 	fri.ProfileImage
 FROM Users u
 LEFT JOIN Group_User gu ON gu.UserId = u.Id
@@ -24,7 +26,7 @@ LEFT JOIN Friends f ON f.UserId = u.Id
 LEFT JOIN Users fri ON fri.Id = f.FriendId
 END
 
-CREATE PROCEDURE GetUserById @Id varchar(100)
+ALTER PROCEDURE GetUserById @Id varchar(100)
 AS
 BEGIN
 SELECT 
@@ -42,7 +44,8 @@ SELECT
 	g.Image,
 	fri.Id,
 	fri.UserName,
-    fri.UserName,
+	fri.FirstName,
+	fri.LastName,
 	fri.ProfileImage
 FROM Users u
 LEFT JOIN Group_User gu ON gu.UserId = u.Id
@@ -75,7 +78,8 @@ SELECT
 	g.Image,
 	fri.Id,
 	fri.UserName,
-    fri.UserName,
+	fri.FirstName,
+	fri.LastName,
 	fri.ProfileImage
 FROM Users u
 LEFT JOIN Group_User gu ON gu.UserId = u.Id

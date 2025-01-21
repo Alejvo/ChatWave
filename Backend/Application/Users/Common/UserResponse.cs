@@ -1,4 +1,7 @@
-﻿namespace Application.Users.Common;
+﻿using Application.Groups.Common;
+using Domain.Friends;
+
+namespace Application.Users.Common;
 
 public sealed record UserResponse
     (
@@ -6,7 +9,9 @@ public sealed record UserResponse
         string FullName,
         string Username,
         int Age,
-        string ProfileImage
+        string ProfileImage,
+        IEnumerable<Friend> Friends,
+        IEnumerable<GroupResponse> Groups
     );
 
 
