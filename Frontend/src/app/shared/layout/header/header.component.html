@@ -3,7 +3,7 @@
     <ul class="header-list" [ngClass]="{'active':IsOpened}">
         <li class="header-item">Community</li>
         <li class="header-item">Donwload</li>
-        <li *ngIf="!authService.isLoggedIn()" class="header-item filled-button" routerLink="/auth/login">Sign In</li>
+        <li *ngIf="!authService.isLoggedIn()" class="header-item filled-button" (click)="goToLoginPage()">Sign In</li>
         <li *ngIf="authService.isLoggedIn()" class="header-item filled-button" (click)="openChat()">Open Chat</li>
         <li *ngIf="authService.isLoggedIn()" class="header-item filled-button" (click)="onLogOut()">Log Out</li>
     </ul>

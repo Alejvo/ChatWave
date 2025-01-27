@@ -3,7 +3,7 @@ using Application.Groups.Common;
 using Domain.Groups;
 using Shared;
 
-namespace Application.Groups.Get.Id;
+namespace Application.Groups.GetById;
 
 internal sealed class GetGroupByIdQueryHandler : IQueryHandler<GetGroupByIdQuery, GroupResponse>
 {
@@ -16,7 +16,7 @@ internal sealed class GetGroupByIdQueryHandler : IQueryHandler<GetGroupByIdQuery
 
     public async Task<Result<GroupResponse>> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
     {
-        if (await _groupRepository.GetById( request.Id ) is not Group group)
+        if (await _groupRepository.GetById(request.Id) is not Group group)
         {
             return Result.Failure<GroupResponse>(GroupErrors.NotFound(request.Id));
         }

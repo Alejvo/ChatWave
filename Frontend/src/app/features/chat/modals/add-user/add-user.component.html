@@ -3,8 +3,8 @@
     <span class="close" (click)="closeModal()">&times;</span>
     <div class="modal-search">
 
-        <input #userInput placeholder="Find a user" class="search-input" (keyup.enter)="filterUsers(userInput.value)">
-        <div class="search-icon" (click)="filterUsers(userInput.value)">
+        <input #userInput placeholder="Find a user" class="search-input" (keyup.enter)="getUsers(1,2)">
+        <div class="search-icon" (click)="getUsers(1,2)">
             <mat-icon>search</mat-icon>
         </div>
     </div>
@@ -14,9 +14,10 @@
                 <div class="result-image">
                     <img [src]="'data:image/png;base64,' + item.profileImage" alt="Profile Image" />
                 </div>
-                <div class="result-title">{{item.userName}}</div>
+                <div class="result-title">{{item.username}}</div>
             </div>
-            <button class="result-button" (click)="addFriend(item.id)">Add to Friend</button>
+            <button *ngIf="!isFriend(item.id)" class="result-button" (click)="makeRequest(item.id)">Make Request</button>
+            <button *ngIf="isFriend(item.id)" class="result-button" >Already Friends</button>
         </div>
     </div>
 </div>

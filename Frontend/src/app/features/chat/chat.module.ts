@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ChatRoutingModule } from './chat-routing.module';
 import { ChatPageComponent } from './pages/chat-page/chat-page.component';
 import { AddUserComponent } from './modals/add-user/add-user.component';
 import { AddGroupComponent } from './modals/add-group/add-group.component';
@@ -10,7 +12,7 @@ import { NotMessageComponent } from './components/not-message/not-message.compon
 import { OptionsComponent } from './components/options/options.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -27,7 +29,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     MatIconModule,
-    FormsModule
+    FormsModule,
+    ChatRoutingModule
   ]
 })
 export class ChatModule { }

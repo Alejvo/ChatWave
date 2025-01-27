@@ -3,7 +3,7 @@ using Application.Users.Common;
 using Domain.Users;
 using Shared;
 
-namespace Application.Users.Get.Id;
+namespace Application.Users.GetById;
 
 internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserResponse>
 {
@@ -17,7 +17,7 @@ internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, 
     public async Task<Result<UserResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetById(request.Id);
-        if (user == null) return Result.Failure<UserResponse>(UserErrors.NotFound(request.Id)); 
+        if (user == null) return Result.Failure<UserResponse>(UserErrors.NotFound(request.Id));
 
         var userResponse = user.ToUserResponse();
         return userResponse;

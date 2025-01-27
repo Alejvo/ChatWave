@@ -1,5 +1,7 @@
 export interface friend{
     id: string;
-    name: string;
+    firstName:string;
+    lastName:string;
+    username:string;
     profileImage: string;
 }

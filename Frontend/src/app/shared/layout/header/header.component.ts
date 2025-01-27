@@ -16,6 +16,9 @@ export class HeaderComponent {
   toggle() {
     this.IsOpened = !this.IsOpened;
   }
+  goToLoginPage(){
+    this.router.navigate(['/auth/login']);
+  }
   openChat() {
     this.router.navigate(['/chat']);
   }

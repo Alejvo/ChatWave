@@ -12,6 +12,10 @@ using WebApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
+
 builder.Host.UseSerilog((context,loggerConfig)=>
     loggerConfig.ReadFrom.Configuration(context.Configuration));
 
@@ -47,6 +51,18 @@ builder.Services.AddSwaggerGen(options =>
             new string[] {}
         }
     });
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "ChatWavePolicy",
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:4200")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod()
+                      .AllowCredentials();
+            });
 });
 
 builder.Services
@@ -87,8 +103,14 @@ builder.Services.AddAuthentication(config =>
                 context.Token = accessToken;
             }
             return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            Log.Error("Authentication failed. Exception: {ExceptionMessage}", context.Exception.Message);
+            return Task.CompletedTask;
         }
     };
+
 
 
 });
@@ -109,6 +131,8 @@ app.UseMiddleware<RequestLogContextMiddleware>();
 
 app.UseErrorHandlingMiddleware();
 app.UseSerilogRequestLogging();
+
+app.UseCors("ChatWavePolicy");
 
 app.MapHub<ChatHub>("/chatHub");
 

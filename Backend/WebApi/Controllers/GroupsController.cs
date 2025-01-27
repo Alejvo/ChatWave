@@ -1,8 +1,7 @@
 ﻿using Application.Groups.Create;
 using Application.Groups.Delete;
-using Application.Groups.Get.All;
-using Application.Groups.Get.Id;
-using Application.Groups.Get.Name;
+using Application.Groups.GetAll;
+using Application.Groups.GetById;
 using Application.Groups.JoinGroup;
 using Application.Groups.LeaveGroup;
 using Application.Groups.Update;
@@ -32,9 +31,9 @@ public class GroupsController : ApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetGroups()
+    public async Task<IActionResult> GetGroups(string? searchTerm,string? sortColumn,string? sortOrder,int page,int pageSize)
     {
-        var res = await _sender.Send(new GetGroupsQuery());
+        var res = await _sender.Send(new GetGroupsQuery(searchTerm,sortColumn,sortOrder,page,pageSize));
         return res.IsSuccess ? Ok(res): Problem(res.Errors); 
     }
 
@@ -44,14 +43,6 @@ public class GroupsController : ApiController
     {
         var res = await _sender.Send(new GetGroupByIdQuery(id));
         return res.IsSuccess ? Ok(res): Problem(res.Errors); 
-    }
-
-    [HttpGet]
-    [Route("name/{name}")]
-    public async Task<IActionResult> GetGroupByName(string name)
-    {
-        var res = await _sender.Send(new GetGroupsByNameQuery(name));
-        return res.IsSuccess ? Ok(res): Problem(res.Errors);
     }
 
     [HttpPut]

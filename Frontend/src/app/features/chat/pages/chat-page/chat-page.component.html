@@ -1,5 +1,5 @@
+<ng-container *ngIf="user">
 <div class="chat-container">
-
     <div class="contacts-list" [ngClass]="{'active':isSideBarActive,'inactive':!isSideBarActive}">
         <div class="contacts-search">
             <input class="contacts-input" placeholder="Search" />
@@ -16,7 +16,7 @@
                 </div>
                 <ng-container *ngIf="user !== null; else noFriends">
                     <div class="friends-container" *ngFor="let friend of user.friends">
-                        <app-contacts [Name]="friend.name" (messagesEvent)="loadHistory(friend.id,'friend')"
+                        <app-contacts [Name]="friend.username" (messagesEvent)="loadHistory(friend.id,'friend')"
                             [profilePhoto]="'data:image/png;base64,' + friend.profileImage"></app-contacts>
                     </div>
                 </ng-container>
@@ -45,8 +45,7 @@
 
             </div>
         </div>
-        <app-contacts [profilePhoto]="'data:image/png;base64,' + this.user?.profileImage" class="contacts-personalInfo"
-            [Name]="username"></app-contacts>
+        <app-contacts [profilePhoto]="photo" class="contacts-personalInfo" [Name]="user!.username"></app-contacts>
     </div>
 
     <div #messageContainer class="messages-list">
@@ -61,7 +60,7 @@
             <app-not-message></app-not-message>
         </ng-template>
     </div>
-    <app-options class="options" [appUser]="user" (toggle)="toggleMenu()"></app-options>
+    <app-options class="options" (toggle)="toggleMenu()"></app-options>
 
     <div class="send-message">
         <textarea id="newMessage" type="text" name="newMessage" [(ngModel)]="messageContent" class="send-message-input"
@@ -71,4 +70,4 @@
 
     </div>
 </div>
-
+</ng-container>

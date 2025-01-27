@@ -1,9 +1,8 @@
 ﻿using Application.Abstractions;
 using Application.Users.Create;
 using Application.Users.Delete;
-using Application.Users.Get.All;
-using Application.Users.Get.Id;
-using Application.Users.Get.Username;
+using Application.Users.GetAll;
+using Application.Users.GetById;
 using Application.Users.Update;
 using Domain.Users;
 using MediatR;
@@ -37,9 +36,9 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(string? searchTerm,string? sortColumn,string? sortOrder,int page,int pageSize)
         {
-            var command = new GetUsersQuery();
+            var command = new GetUsersQuery(searchTerm,sortColumn,sortOrder,page,pageSize);
             var res = await _sender.Send(command);
             return res.IsSuccess ? Ok(res) : Problem(res.Errors);
         }
@@ -48,14 +47,6 @@ namespace WebApi.Controllers
         public async Task<IActionResult> GetById(string id)
         {
             var command = new GetUserByIdQuery(id);
-            var res = await _sender.Send(command);
-            return res.IsSuccess ? Ok(res) : Problem(res.Errors);
-        }
-
-        [HttpGet("username/{username}")]
-        public async Task<IActionResult> GetByUsername(string username)
-        {
-            var command = new GetUsersByUsernameQuery(username);
             var res = await _sender.Send(command);
             return res.IsSuccess ? Ok(res) : Problem(res.Errors);
         }

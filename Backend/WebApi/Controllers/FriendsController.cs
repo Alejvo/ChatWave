@@ -25,7 +25,7 @@ public class FriendsController : ApiController
     public async Task<IActionResult> AddFriend([FromBody] AddFriendCommand command)
     {
        var res = await _sender.Send(command);
-        return res.IsSuccess ? Ok() : Problem(res.Errors);
+        return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 
     [HttpPost]
@@ -33,7 +33,7 @@ public class FriendsController : ApiController
     public async Task<IActionResult> RemoveFriend([FromBody] RemoveFriendCommand command)
     {
         var res = await _sender.Send(command);
-        return res.IsSuccess ? Ok() : Problem(res.Errors);
+        return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 
     [HttpPost]
@@ -41,7 +41,7 @@ public class FriendsController : ApiController
     public async Task<IActionResult> MakeFriendRequest([FromBody] MakeFriendRequestCommand command)
     {
         var res = await _sender.Send(command);
-        return res.IsSuccess ? Ok() : Problem(res.Errors);
+        return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 
     [HttpGet]

@@ -8,7 +8,7 @@
         <span class="icon_tool-tip">Add Person</span>
     </button>
 
-    <app-add-user [appUser]="appUser" [isVisible]="isModalVisible1" (closeModalEvent)="closeModal1()">
+    <app-add-user  [isVisible]="isModalVisible1" (closeModalEvent)="closeModal1()">
 
     </app-add-user>
 
@@ -17,7 +17,7 @@
         <span class="icon_tool-tip">Add Group</span>
     </button>
 
-    <app-add-group [appUser]="appUser" [isVisible]="isModalVisible2" (closeModalEvent)="closeModal2()">
+    <app-add-group [isVisible]="isModalVisible2" (closeModalEvent)="closeModal2()">
     </app-add-group>
 
     <button class="icon" (click)="toggleCreateGroupModal()">

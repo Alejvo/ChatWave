@@ -2,8 +2,8 @@
 <div class="modal-content" *ngIf="isVisible">
     <span class="close" (click)="closeModal()">&times;</span>
     <div class="modal-search">
-        <input #nameInput placeholder="Find a user" class="search-input" (keyup.enter)="filterGroups(nameInput.value)">
-        <div class="search-icon" (click)="filterGroups(nameInput.value)">
+        <input #nameInput placeholder="Find a user" class="search-input" (keyup.enter)="filterGroups(1,2)">
+        <div class="search-icon" (click)="filterGroups(1,2)">
             <mat-icon>search</mat-icon>
         </div>
     </div>

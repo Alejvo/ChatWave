@@ -6,7 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from 'src/app/core/interceptors/auth.interceptor';
-
+import { AuthRoutingModule } from './auth-routing.module';
 
 @NgModule({
   declarations: [
@@ -15,14 +15,16 @@ import { AuthInterceptor } from 'src/app/core/interceptors/auth.interceptor';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    AuthRoutingModule
   ],
-  exports:[
+  exports: [
     LoginComponent,
     RegisterComponent
   ],
-  providers:[
+  providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 })
+
 export class AuthModule { }

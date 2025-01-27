@@ -4,7 +4,7 @@ import { group } from "./group";
 export interface user {
     id: string;
     fullName: string;
-    userName: string;
+    username: string;
     age: number;
     groups: group[];
     friends: friend[];

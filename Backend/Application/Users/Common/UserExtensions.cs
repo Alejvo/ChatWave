@@ -1,4 +1,5 @@
-﻿using Application.Groups.Common;
+﻿using Application.Friends.Common;
+using Application.Groups.Common;
 using Domain.Users;
 
 namespace Application.Users.Common;
@@ -13,7 +14,7 @@ public static class UserExtensions
             user.Username,
             GetAge(user.Birthday),
             user.ProfileImage != null ? Convert.ToBase64String(user.ProfileImage) : null,
-            user.Friends,
+            user.Friends.Select(friend =>friend.ToFriendResponse()),
             user.Groups.Select(group => group.ToGroupResponse())
             );
         return userResponse;

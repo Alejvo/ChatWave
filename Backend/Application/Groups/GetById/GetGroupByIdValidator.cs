@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Groups.Get.Id;
+namespace Application.Groups.GetById;
 
 public sealed class GetGroupByIdValidator : AbstractValidator<GetGroupByIdQuery>
 {

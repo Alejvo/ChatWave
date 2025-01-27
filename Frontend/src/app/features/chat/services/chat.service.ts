@@ -9,7 +9,7 @@ import { AuthService } from '../../auth/services/auth.service';
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = environment.apiUrl;
+  public apiUrl:string = environment.apiUrl;
   private hubConnection!: HubConnection;
 
   private messageReceivedSubject = new Subject<message>();
@@ -19,15 +19,16 @@ export class ChatService {
   messageHistory$ = this.messageHistorySubject.asObservable();
   
   constructor(
-    private http: HttpClient, 
     private authService: AuthService
   ){}
 
   public startConnection() {
 
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.apiUrl}/chatHub`, {
+      .withUrl(`${this.apiUrl}/chatHub`, {
+        withCredentials: true,
         accessTokenFactory: () => {
+          console.log(this.authService.getToken())
           return this.authService.getToken() || '';
         }
       })
@@ -48,18 +49,20 @@ export class ChatService {
     })
   }
 
-
   public getMessageHistory(receiver: String, sender: String) {
     this.hubConnection.invoke('GetUserMessages', receiver, sender)
       .catch(err => console.error(err))
   }
+
   public sendMessageToUser(receiver: string, sender: string, message: string) {
     this.hubConnection.invoke('SendMessageToUser', receiver, sender, message)
       .catch(err => console.error(err))
   }
+
   public getGroupMessageHistory(group: string, user: string) {
     this.hubConnection.invoke('GetGroupMessages', group, user)
   }
+
   public sendGroupMessage(group: string, sender: string, message: string) {
     this.hubConnection.invoke('SendMessageToGroup', group, sender, message)
   }

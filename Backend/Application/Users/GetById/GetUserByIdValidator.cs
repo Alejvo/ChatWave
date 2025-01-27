@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Application.Users.Get.Id;
+namespace Application.Users.GetById;
 
 public sealed class GetUserByIdValidator : AbstractValidator<GetUserByIdQuery>
 {

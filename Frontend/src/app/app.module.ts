@@ -9,7 +9,8 @@ import { SharedModule } from "./shared/shared.module";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatIconModule } from '@angular/material/icon';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
- 
+import { ChatModule } from './features/chat/chat.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,6 +21,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
+    ChatModule,
     BrowserAnimationsModule,
     MatIconModule
 ],

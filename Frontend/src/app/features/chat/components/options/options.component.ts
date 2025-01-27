@@ -14,18 +14,15 @@ export class OptionsComponent {
   @ViewChild(AddGroupComponent) groupModal!: AddGroupComponent;
 
   @Output() toggle = new EventEmitter<void>();
-  @Input() appUser: user | null = null;
   isModalVisible1: boolean = false;
   isModalVisible2: boolean = false;
   isCreateGroupModalVisible: boolean = false;
   isAFriend: boolean = false;
   constructor(private authService: AuthService) { }
   closeModal1() {
-    this.userModal.loadContent()
     this.isModalVisible1 = !this.isModalVisible1;
   }
   closeModal2() {
-    this.groupModal.loadGroups()
     this.isModalVisible2 = !this.isModalVisible2;
   }
   toggleCreateGroupModal() {
