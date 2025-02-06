@@ -10,7 +10,7 @@ public class MessageResponse
     public string OriginId { get; set; }
     public string DestinyId { get; set; }
     public DateTime SentAt { get; set; }
-    public MessageType Type { get; set; }
+    public string MessageType { get; set; }
 
     public bool IsSentByUser { get; set; }
 }

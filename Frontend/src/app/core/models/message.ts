@@ -1,7 +1,9 @@
 export interface message {
-    status: string;
+    messageId:string;
     text: string;
-    senderId: string;
-    contactId: string;
+    originId: string;
+    destinyId: string;
     sentAt: Date;
+    messageType:string;
+    isSentByUser:boolean;
 }

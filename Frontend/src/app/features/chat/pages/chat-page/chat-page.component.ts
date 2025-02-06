@@ -59,18 +59,14 @@ export class ChatPageComponent implements OnInit{
 
           this.chatService.messageReceived$.subscribe({
             next: (data) => {
-              const status = data.senderId === this.user?.id ? 'Sent' : 'Received'
-              this.messages.push({ ...data, status });
+              console.log('Received',data)
+              this.messages.push(data);
             }
           })
 
           this.chatService.messageHistory$.subscribe({
             next: (data) => {
               this.messages = data;
-              this.messages = this.messages.map(msg => ({
-                ...msg,
-                status: msg.senderId === this.user?.id ? 'Sent' : 'Received'
-              }));
             }
           });
         }
@@ -119,7 +115,7 @@ export class ChatPageComponent implements OnInit{
     if (this.user?.id !== null && this.currentContact && this.messageContent) {
       (this.contactType === 'group')
         ? this.chatService.sendGroupMessage(this.currentContact, this.user!.id, this.messageContent)
-        : this.chatService.sendMessageToUser(this.currentContact, this.user!.id, this.messageContent)
+        : this.chatService.sendMessageToUser(this.user!.id, this.currentContact,  this.messageContent)
       this.messageContent = '';
     }
   }

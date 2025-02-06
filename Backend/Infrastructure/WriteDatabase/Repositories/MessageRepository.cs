@@ -15,23 +15,23 @@ public class MessageRepository : IMessageRepository
         _sqlConnection = sqlConnection;
     }
 
-    public async Task<IEnumerable<GroupMessage>> GetGroupMessages(string receiver, string group)
+    public async Task<IEnumerable<GroupMessage>> GetGroupMessages(string userId, string groupId)
     {
         using var connection = _sqlConnection.CreateConnection();
         return await connection.QueryAsync<GroupMessage>(
                 MessageProcedures.GetGroupMessages.ToString(),
-                param: new { GroupId = group },
+                param: new { GroupId = groupId },
                 commandType: CommandType.StoredProcedure
             );
     }
 
-    public async Task<IEnumerable<UserMessage>> GetUserMessages(string receiver, string sender)
+    public async Task<IEnumerable<UserMessage>> GetUserMessages(string originId, string destinyId)
     {
         using var connection = _sqlConnection.CreateConnection();
 
         return await connection.QueryAsync<UserMessage>(
                 MessageProcedures.GetUserMessages.ToString(),
-                param: new { ReceiverId = receiver, SenderId = sender },
+                param: new { OriginId = originId, DestinyId = destinyId },
                 commandType: CommandType.StoredProcedure
             );
     }

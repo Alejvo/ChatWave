@@ -1,11 +1,12 @@
 ﻿using Application.Abstractions;
+using Application.Messages.Common;
 
 namespace Application.Messages.SendGroupMessage;
 
 public sealed record SendGroupMessageCommand(
     string Text,
-    string SenderId,
+    string UserId,
     string GroupId,
     DateTime SentAt
-    ) : ICommand;
+    ) : ICommand<MessageResponse>;
 

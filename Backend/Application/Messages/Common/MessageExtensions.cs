@@ -11,10 +11,10 @@ public static class MessageExtensions
             MessageId = userMessage.MessageId,
             Text = userMessage.Text,
             SentAt = userMessage.SentAt,
-            Type = MessageType.User,
-            DestinyId = userMessage.ReceiverId,
-            OriginId = userMessage.SenderId,
-            IsSentByUser = userMessage.SenderId == currentUser
+            MessageType = MessageType.User.ToString(),
+            DestinyId = userMessage.DestinyId,
+            OriginId = userMessage.OriginId,
+            IsSentByUser = userMessage.OriginId == currentUser
         };
     }
 
@@ -25,10 +25,10 @@ public static class MessageExtensions
             MessageId = groupMessage.MessageId,
             Text = groupMessage.Text,
             SentAt = groupMessage.SentAt,
-            Type = MessageType.Group,
+            MessageType = MessageType.Group.ToString(),
             DestinyId = groupMessage.GroupId,
-            OriginId = groupMessage.SenderId,
-            IsSentByUser = groupMessage.SenderId == currentUser
+            OriginId = groupMessage.UserId,
+            IsSentByUser = groupMessage.UserId == currentUser
         };
     }
 }

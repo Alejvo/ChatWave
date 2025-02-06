@@ -4,6 +4,6 @@ using Domain.Messages;
 
 namespace Application.Messages.GetGroupMessage;
 public sealed record GetGroupMessageQuery(
-    string ReceiverId,
+    string UserId,
     string GroupId
     ) : IQuery<IEnumerable<MessageResponse>>;

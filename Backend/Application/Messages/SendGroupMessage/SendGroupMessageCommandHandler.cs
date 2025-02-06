@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.Messages.Common;
 using Domain.Groups;
 using Domain.Messages;
 using Domain.Users;
@@ -6,7 +7,7 @@ using Shared;
 
 namespace Application.Messages.SendGroupMessage;
 
-internal sealed class SendGroupMessageCommandHandler : ICommandHandler<SendGroupMessageCommand>
+internal sealed class SendGroupMessageCommandHandler : ICommandHandler<SendGroupMessageCommand,MessageResponse>
 {
     private readonly IMessageRepository _messageRepository;
     private readonly IGroupRepository _groupRepository;
@@ -19,18 +20,18 @@ internal sealed class SendGroupMessageCommandHandler : ICommandHandler<SendGroup
         _userRepository = userRepository;
     }
 
-    public async Task<Result> Handle(SendGroupMessageCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MessageResponse>> Handle(SendGroupMessageCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetById(request.SenderId);
-        if (user == null) return Result.Failure<IEnumerable<GroupMessage>>(UserErrors.NotFound(request.GroupId));
+        var user = await _userRepository.GetById(request.UserId);
+        if (user == null) return Result.Failure<MessageResponse>(UserErrors.NotFound(request.GroupId));
 
         var group = await _groupRepository.GetById(request.GroupId);
-        if (group == null) return Result.Failure<IEnumerable<GroupMessage>>(GroupErrors.NotFound(request.GroupId));
+        if (group == null) return Result.Failure<MessageResponse>(GroupErrors.NotFound(request.GroupId));
 
         var id = Guid.NewGuid().ToString();
-        var message = GroupMessage.Create(id, request.Text, request.SenderId, request.GroupId, request.SentAt);
+        var message = GroupMessage.Create(id, request.Text, request.UserId, request.GroupId, request.SentAt);
 
         await _messageRepository.SendToGroup(message);
-        return Result.Success();
+        return Result.Success(message.ToMessageResponse(user.Id));
     }
 }

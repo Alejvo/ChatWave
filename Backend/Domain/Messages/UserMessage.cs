@@ -4,20 +4,20 @@ public sealed class UserMessage
 {
     public string MessageId { get; set; }
     public string Text { get; set; }
-    public string SenderId { get; set; }
-    public string ReceiverId { get; set; }
+    public string OriginId { get; set; }
+    public string DestinyId { get; set; }
     public DateTime SentAt { get; set; }
 
     private UserMessage()
     {
     }
 
-    private UserMessage(string messageId, string text, string senderId, string receiverId, DateTime sentAt)
+    private UserMessage(string messageId, string text, string originId, string destinyId, DateTime sentAt)
     {
         MessageId = messageId;
         Text = text;
-        SenderId = senderId;
-        ReceiverId = receiverId;
+        OriginId = originId;
+        DestinyId = destinyId;
         SentAt = sentAt;
     }
 

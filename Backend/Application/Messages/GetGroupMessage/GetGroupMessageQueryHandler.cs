@@ -24,14 +24,14 @@ internal sealed class GetGroupMessageQueryHandler : IQueryHandler<GetGroupMessag
 
     public async Task<Result<IEnumerable<MessageResponse>>> Handle(GetGroupMessageQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetById(request.ReceiverId);
-        if (user == null) return Result.Failure<IEnumerable<MessageResponse>>(UserErrors.NotFound(request.ReceiverId));
+        var user = await _userRepository.GetById(request.UserId);
+        if (user == null) return Result.Failure<IEnumerable<MessageResponse>>(UserErrors.NotFound(request.UserId));
 
         var group = await _groupRepository.GetById(request.GroupId);
         if (group == null) return Result.Failure<IEnumerable<MessageResponse>>(GroupErrors.NotFound(request.GroupId));
 
-        var groupMessage = await _messageRepository.GetGroupMessages(request.ReceiverId,request.GroupId);
-        var messages = groupMessage.Select(message => message.ToMessageResponse(request.ReceiverId));
+        var groupMessage = await _messageRepository.GetGroupMessages(request.UserId,request.GroupId);
+        var messages = groupMessage.Select(message => message.ToMessageResponse(request.UserId));
 
         return Result.Success(messages);
     }

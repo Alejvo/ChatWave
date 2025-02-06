@@ -17,38 +17,38 @@ public class ChatHub : Hub
     {
         _sender = sender;
     }
-
+    /*
     public override Task OnConnectedAsync()
     {
         Console.WriteLine($"ConnId:{Context.ConnectionId}, User:{Context.UserIdentifier}");
         return base.OnConnectedAsync();
-    }
+    }*/
 
-    public async Task SendMessageToUser(string receiver, string sender, string message)
+    public async Task SendMessageToUser(string originId, string destinyId, string message)
     {
         var sentAt = DateTime.UtcNow;
-        var newMessage = await _sender.Send(new SendUserMessageCommand(message, sender, receiver, sentAt));
+        var newMessage = await _sender.Send(new SendUserMessageCommand(message, originId, destinyId, sentAt));
         if(newMessage.IsSuccess)
         {
-            await Clients.User(receiver).SendAsync("ReceiveMessage", newMessage);
-            await Clients.User(sender).SendAsync("ReceiveMessage", newMessage);
+            await Clients.User(destinyId).SendAsync("ReceiveMessage", newMessage.Value);
+            await Clients.User(originId).SendAsync("ReceiveMessage", newMessage.Value);
         }
     }
-    public async Task GetUserMessages(string receiver, string sender)
+    public async Task GetUserMessages(string originId, string destinyId)
     {
-        var messages = await _sender.Send(new GetUserMessageQuery(receiver, sender));
+        var messages = await _sender.Send(new GetUserMessageQuery(originId,destinyId));
         await Clients.Caller.SendAsync("ReceiveMessageHistory", messages.Value);
     }
 
-    public async Task GetGroupMessages(string group, string user)
+    public async Task GetGroupMessages(string groupId, string userId)
     {
-        var messages = await _sender.Send(new GetGroupMessageQuery(user, group));
-        await Groups.AddToGroupAsync(Context.ConnectionId, group);
+        var messages = await _sender.Send(new GetGroupMessageQuery(userId, groupId));
+        await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
         await Clients.Caller.SendAsync("ReceiveMessageHistory", messages.Value);
     }
-    public async Task SendMessageToGroup(string group, string sender, string message)
+    public async Task SendMessageToGroup(string groupId, string userId, string message)
     {
-        var newMessage = await _sender.Send(new SendGroupMessageCommand(message, sender, group, DateTime.Now));
-        await Clients.Group(group).SendAsync("ReceiveMessage", newMessage);
+        var newMessage = await _sender.Send(new SendGroupMessageCommand(message, userId, groupId, DateTime.Now));
+        await Clients.Group(groupId).SendAsync("ReceiveMessage", newMessage.Value);
     }
 }

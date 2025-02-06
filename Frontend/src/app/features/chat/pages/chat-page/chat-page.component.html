@@ -51,7 +51,7 @@
     <div #messageContainer class="messages-list">
         <ng-container *ngIf="messages && messages.length >0; else noMessages">
             <ng-container *ngFor="let msg of messages">
-                <app-message [text]="msg.text" [isSended]="msg.status === 'Sent'">
+                <app-message [text]="msg.text" [isSended]="msg.isSentByUser">
                 </app-message>
             </ng-container>
         </ng-container>
