@@ -37,55 +37,45 @@ export class ChatPageComponent implements OnInit{
 
   
   ngOnInit() {
-    const token = this.authService.getToken();
-    if (token) {
-      const info = this.authService.getUserInfoFromToken(token);
 
-      if (info) {
-        this.userService.getUserById(info.userId).subscribe(
-          {
-            next: (data: user) => {
-              this.userService.setUser(data);
-              this.user = this.userService.getUser();
-              this.photo = `${this.imageFormat},${this.user!.profileImage}`
-              this.isLoading = false;
-            },
-            error: (error) => {
-              console.error('Error when tried to get user', error)
-            }
-          }
-        );
-          this.chatService.startConnection();
+    const token = this.authService.getUserInfoFromToken();
 
-          this.chatService.messageReceived$.subscribe({
-            next: (data) => {
-              console.log('Received',data)
-              this.messages.push(data);
-            }
-          })
+    this.userService.getUserById(token!.userId).subscribe({
+      next: (data: user) => {
+        this.userService.setUser(data);
+        this.user = data;
+        this.photo = `${this.imageFormat},${this.user.profileImage}`;
+        this.isLoading = false;
+      },
+      error: (error) => console.error('Error when trying to get user', error)
+    });
 
-          this.chatService.messageHistory$.subscribe({
-            next: (data) => {
-              this.messages = data;
-            }
-          });
-        }
-        
+    this.chatService.startConnection();
+    this.chatService.messageReceived$.subscribe(data => this.messages.push(data));
+    this.chatService.messageHistory$.subscribe({
+      next: (data) => {
+        this.messages = data;
+        this.scrollToBottom();
       }
+    });
+
   }
 
   showModal() {
     this.isModalVisible = !this.isModalVisible;
   }
-  ngAfterViewChecked() {
-    if(!this.isLoading){
-      this.scrollToBottom();
-    }
+  
+  ngAfterViewInit() {
+    this.scrollToBottom();
   }
 
   private scrollToBottom(): void {
-    const container = this.messageContainer.nativeElement;
-    container.scrollTop = container.scrollHeight;
+    setTimeout(() => {
+      if (this.messageContainer?.nativeElement) {
+        const container = this.messageContainer.nativeElement;
+        container.scrollTo({ top: container.scrollHeight, behavior: 'auto' }); // Desplazamiento sin animación
+      }
+    }, 0);
   }
   toggle(value: boolean) {
     value = !value;

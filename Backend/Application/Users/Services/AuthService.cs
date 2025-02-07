@@ -46,7 +46,7 @@ public class AuthService : IAuthService
                     new Claim(JwtRegisteredClaimNames.Sub,userId),
                     new Claim(JwtRegisteredClaimNames.UniqueName,username)
             }),
-            Expires = DateTime.UtcNow.AddMinutes(15),
+            Expires = DateTime.UtcNow.AddDays(1),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(keyBytes), SecurityAlgorithms.HmacSha256Signature)
         };
         var tokenHandler = new JwtSecurityTokenHandler();

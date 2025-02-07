@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/features/auth/services/auth.service';
 
 @Component({
@@ -7,12 +8,29 @@ import { AuthService } from 'src/app/features/auth/services/auth.service';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit{
   IsOpened: boolean = false;
+  isAuthenticated:boolean = false;
+  private authSubscription!:Subscription;
   constructor(
     public authService: AuthService,
-    private router: Router) { }
-    
+    private router: Router) {}
+  
+  ngOnInit(): void {
+    this.authSubscription = this.authService.authStatus$.subscribe(status => {
+      this.isAuthenticated = status;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }  
+  checkAuthStatus() {
+    this.isAuthenticated = this.authService.isLoggedIn();
+    console.log('isAuthenticated:', this.isAuthenticated); // Agrega esto para depuración
+  }
   toggle() {
     this.IsOpened = !this.IsOpened;
   }
