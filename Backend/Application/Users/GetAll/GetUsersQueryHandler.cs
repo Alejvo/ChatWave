@@ -17,7 +17,9 @@ namespace Application.Users.GetAll
         public async Task<Result<PagedList<UserResponse>>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
         {
             var usersQuery = await _userRepository.GetAll();
-            var userResponseQuery = usersQuery.Select(user => user.ToUserResponse());
+            var userResponseQuery = usersQuery
+                .Where(user => user.Id != request.currentUserId)
+                .Select(user => user.ToUserResponse());
 
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {

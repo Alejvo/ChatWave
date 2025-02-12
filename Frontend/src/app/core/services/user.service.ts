@@ -34,13 +34,15 @@ export class UserService {
   getUsers(
     page:number,
     pageSize:number,
+    currentUserId:string,
     searchTerm?:string,
     sortColumn?:string,
     sortOrder?:string
   ): Observable<PagedList<user>> {
     let params:HttpParams = new HttpParams()
       .set('page',page.toString())
-      .set('pageSize',pageSize.toString());
+      .set('pageSize',pageSize.toString())
+      .set('currentUserId', currentUserId);
 
     if (searchTerm) params.set('searchTerm', searchTerm);
     if (sortColumn) params.set('sortColumn', sortColumn);

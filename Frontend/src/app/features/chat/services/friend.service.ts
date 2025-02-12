@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
+import { friend } from 'src/app/core/models/friend';
 import { user } from 'src/app/core/models/user';
 import { environment } from 'src/environments/environment';
 
@@ -14,8 +15,12 @@ export class FriendService {
     
   constructor(private http: HttpClient) { }
 
-  getRequests(userId:string){
-
+  getRequests(userId:string):Observable<friend[]>{
+    const params = new HttpParams().set('userId',userId)
+    return this.http.get<friend[]>(`${this.apiUrl}/api/friends/request`, {params})
+    .pipe(
+      map((response:any) => response.value)
+    );
   }
 
   makeFriendRequest(userId: string, friendId: string): Observable<HttpResponse<any>> {

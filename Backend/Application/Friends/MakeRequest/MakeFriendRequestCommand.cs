@@ -4,6 +4,5 @@ namespace Application.Friends.MakeRequest;
 
 public sealed record MakeFriendRequestCommand(
     string UserId,
-    string FriendId,
-    DateTime SentAt
+    string FriendId
     ) : ICommand;

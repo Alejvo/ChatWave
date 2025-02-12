@@ -1,13 +1,6 @@
 <div class="modal-overlay" *ngIf="isVisible" (click)="closeModal()"></div>
 <div class="modal-content" *ngIf="isVisible">
     <span class="close" (click)="closeModal()">&times;</span>
-    <div class="modal-search">
-
-        <input #userInput placeholder="Find a user" class="search-input" (keyup.enter)="getUsers(1,2)">
-        <div class="search-icon" (click)="getUsers(1,4)">
-            <mat-icon>search</mat-icon>
-        </div>
-    </div>
     <div class="search-result">
         <div class="result-info" *ngFor="let item of result">
             <div class="result-content">
@@ -16,12 +9,8 @@
                 </div>
                 <div class="result-title">{{item.username}}</div>
             </div>
-            <button 
-            class="result-button" 
-            [disabled]="getFriendshipStatus(item.id) !== 'Add Friend'"
-            (click)="makeRequest(item.id)">
-            {{getFriendshipStatus(item.id)}}
-            </button>
+            <button *ngIf="!isFriend(item.id)" class="result-button" (click)="acceptRequest(item.id)">Accept Request</button>
+            <button *ngIf="isFriend(item.id)" class="result-button">Already Friends</button>
         </div>
     </div>
 </div>

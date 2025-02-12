@@ -1,9 +1,14 @@
-CREATE PROCEDURE AddFriend
+altEr PROCEDURE AddFriend
 @UserId VARCHAR(80),
 @FriendId VARCHAR(80)
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM Friends WHERE UserId = @UserId AND FriendId=@FriendId)
+	IF NOT EXISTS(SELECT 1 FROM Friends WHERE UserId = @UserId AND FriendId=@FriendId )
+	AND(
+	EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @UserId AND @FriendId = @FriendId)
+	OR 
+	EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @FriendId AND @FriendId = @UserId)
+	)
 	BEGIN
 		INSERT INTO Friends(UserId,FriendId)
 		VALUES(@UserId,@FriendId)
@@ -28,15 +33,19 @@ BEGIN
 	END
 END
 
-CREATE PROCEDURE MakeFriendRequest
+Alter PROCEDURE MakeFriendRequest
 @Id VARCHAR(80),
 @UserId VARCHAR(80),
 @FriendId VARCHAR(80),
 @SentAt DATETIME
 AS
 BEGIN 
-	INSERT INTO FriendRequest(Id,SenderId,ReceiverId,SentAt)
-	VALUES (@Id,@UserId,@FriendId,@SentAt)
+	IF NOT EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @UserId AND @FriendId = @FriendId)
+	OR NOT EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @FriendId AND @FriendId = @UserId)
+	BEGIN
+		INSERT INTO FriendRequest(Id,SenderId,ReceiverId,SentAt)
+		VALUES (@Id,@UserId,@FriendId,@SentAt)
+	END
 END
 
 ALTER PROCEDURE GetFriendRequests

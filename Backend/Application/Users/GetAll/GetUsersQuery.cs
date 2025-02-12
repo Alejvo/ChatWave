@@ -9,5 +9,6 @@ public sealed record GetUsersQuery(
     string? SortColumn,
     string? SortOrder,
     int Page,
-    int PageSize
+    int PageSize,
+    string currentUserId
     ) : IQuery<PagedList<UserResponse>>;

@@ -58,7 +58,6 @@ export class ChatPageComponent implements OnInit{
         this.scrollToBottom();
       }
     });
-
   }
 
   showModal() {
@@ -73,7 +72,7 @@ export class ChatPageComponent implements OnInit{
     setTimeout(() => {
       if (this.messageContainer?.nativeElement) {
         const container = this.messageContainer.nativeElement;
-        container.scrollTo({ top: container.scrollHeight, behavior: 'auto' }); // Desplazamiento sin animación
+        container.scrollTo({ top: container.scrollHeight, behavior: 'auto' });
       }
     }, 0);
   }

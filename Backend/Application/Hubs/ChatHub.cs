@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace Application.Hubs;
 
 [Authorize]
-public class ChatHub : Hub 
+public sealed class ChatHub : Hub 
 {
     private readonly ISender _sender;
 
@@ -17,12 +17,6 @@ public class ChatHub : Hub
     {
         _sender = sender;
     }
-    /*
-    public override Task OnConnectedAsync()
-    {
-        Console.WriteLine($"ConnId:{Context.ConnectionId}, User:{Context.UserIdentifier}");
-        return base.OnConnectedAsync();
-    }*/
 
     public async Task SendMessageToUser(string originId, string destinyId, string message)
     {

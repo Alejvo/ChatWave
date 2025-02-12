@@ -6,6 +6,17 @@ namespace Application.Users.Common;
 
 public static class UserExtensions
 {
+    public static FriendResponse ToFriendResponse(this UserResponse user)
+    {
+        var friendResponse = new FriendResponse(
+            user.Id,
+            user.FullName,
+            user.Username,
+            user.ProfileImage
+            );
+
+        return friendResponse;
+    }
     public static UserResponse ToUserResponse(this User user)
     {
         var userResponse = new UserResponse(

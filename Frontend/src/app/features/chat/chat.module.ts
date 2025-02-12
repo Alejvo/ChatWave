@@ -13,6 +13,7 @@ import { OptionsComponent } from './components/options/options.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { FriendRequestsComponent } from './modals/friend-requests/friend-requests.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
     ContactsComponent,
     MessageComponent,
     NotMessageComponent,
-    OptionsComponent
+    OptionsComponent,
+    FriendRequestsComponent
   ],
   imports: [
     CommonModule,

@@ -14,7 +14,7 @@ export class AddUserComponent implements OnInit{
   @Output() closeModalEvent = new EventEmitter<void>();
   public appUser:user | null = null; 
   result!: user[];
-
+  friendSet:Set<string> = new Set();
 
   constructor(
     private userService: UserService,
@@ -23,6 +23,12 @@ export class AddUserComponent implements OnInit{
 
   ngOnInit(){
     this.appUser = this.userService.getUser();
+    this.friendService.getRequests(this.appUser!.id).subscribe({
+      next:(data:friend[])=>{
+        console.log(data)
+        data.forEach(user => this.friendSet.add(user.id));
+      }
+    })
   }
   
   makeRequest(friendId: string) {
@@ -38,11 +44,11 @@ export class AddUserComponent implements OnInit{
   }
   
   getUsers(page:number,pageSize:number) {
-    this.userService.getUsers(page,pageSize).subscribe({
+    this.userService.getUsers(page,pageSize,this.appUser!.id).subscribe({
       next: (data) => {
-        console.log(data.items);
+        //console.log(data.items);
         this.result = data.items;
-        let friendId = this.appUser?.friends.map(friend => friend.id) || []
+        //let friendId = this.appUser?.friends.map(friend => friend.id) || []
         //this.result = data.filter(user => user.id !== this.appUser?.id && !friendId.includes(user.id))
       }
     })
@@ -51,8 +57,20 @@ export class AddUserComponent implements OnInit{
   closeModal() {
     this.closeModalEvent.emit();
   }
-
+  isRequestSended(id:string):boolean{
+    return this.friendSet.has(id);
+  }
   isFriend(id:string):boolean{
     return this.appUser!.friends.some((user)=>user.id === id);
+  }
+
+  getFriendshipStatus(id: string): 'Add Friend' | 'Is Already Friend' | 'Request Sended' {
+    if (this.isFriend(id)) {
+      return 'Is Already Friend';
+    }
+    if (this.isRequestSended(id)) {
+      return 'Request Sended';
+    }
+    return 'Add Friend';
   }
 }

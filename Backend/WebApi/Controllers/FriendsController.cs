@@ -46,9 +46,9 @@ public class FriendsController : ApiController
 
     [HttpGet]
     [Route("request")]
-    public async Task<IActionResult> GetRequests([FromQuery] GetFriendRequestsQuery command)
+    public async Task<IActionResult> GetRequests(string userId)
     {
-        var res = await _sender.Send(command);
+        var res = await _sender.Send(new GetFriendRequestsQuery(userId));
         return res.IsSuccess ? Ok(res) : Problem(res.Errors);
     }
 }

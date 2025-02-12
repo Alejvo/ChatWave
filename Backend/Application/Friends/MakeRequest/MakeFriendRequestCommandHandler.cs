@@ -29,7 +29,8 @@ internal sealed class MakeFriendRequestCommandHandler : ICommandHandler<MakeFrie
         if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(request.UserId));
 
         var id = Guid.NewGuid().ToString();
-        var friendRequest = FriendRequest.Create(id,request.UserId,request.FriendId,request.SentAt);
+        var sentAt = DateTime.UtcNow;
+        var friendRequest = FriendRequest.Create(id,request.UserId,request.FriendId,sentAt);
         await _friendRepository.MakeFriendRequest(friendRequest);
         return Result.Success();
     }

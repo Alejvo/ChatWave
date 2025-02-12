@@ -6,4 +6,3 @@ public record FriendResponse(
     string Username,
     string ProfileImage
     );
-

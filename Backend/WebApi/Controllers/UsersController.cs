@@ -36,9 +36,15 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(string? searchTerm,string? sortColumn,string? sortOrder,int page,int pageSize)
+        public async Task<IActionResult> GetAll(
+            string? searchTerm,
+            string? sortColumn,
+            string? sortOrder,
+            int page,
+            int pageSize,
+            string currentUserId)
         {
-            var command = new GetUsersQuery(searchTerm,sortColumn,sortOrder,page,pageSize);
+            var command = new GetUsersQuery(searchTerm,sortColumn,sortOrder,page,pageSize,currentUserId);
             var res = await _sender.Send(command);
             return res.IsSuccess ? Ok(res) : Problem(res.Errors);
         }
