@@ -16,7 +16,9 @@ BEGIN
 		INSERT INTO Friends(UserId,FriendId)
 		VALUES(@FriendId,@UserId)
 
-		DELETE FROM FriendRequest WHERE SenderId=@FriendId AND ReceiverId = @UserId
+		DELETE FROM FriendRequest 
+		WHERE SenderId=@FriendId AND ReceiverId = @UserId OR 
+			  SenderId=@UserId AND ReceiverId = @FriendId
 	END
 END
 
