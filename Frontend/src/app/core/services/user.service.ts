@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/comm
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { user } from '../models/user';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { PagedList } from '../models/pagedList';
 import { friend } from '../models/friend';
 
@@ -24,11 +24,7 @@ export class UserService {
   }
 
   getUserById(id: string): Observable<user> {
-    let params = new HttpParams().set('id', id);
-    return this.http.get(`${this.apiUrl}/api/users/id/${id}`, { params }).pipe(
-      map((response:any) => response.value)
-    )
-
+    return this.http.get<user>(`${this.apiUrl}/api/users/id/${id}`)
   }
 
   getUsers(
@@ -49,7 +45,9 @@ export class UserService {
     if (sortOrder) params.set('sortOrder', sortOrder);
 
     return this.http.get(`${this.apiUrl}/api/users`,{ params })
-    .pipe(map((response: any) => response.value));
+    .pipe(
+      map((response: any) => response.value)
+    );
   }
 
   registerUser(
@@ -59,9 +57,14 @@ export class UserService {
     password: string,
     username: string,
     birthday: Date): Observable<HttpResponse<any>> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = { firstname, lastname, email, password, username, birthday }
-    return this.http.post<any>(`${this.apiUrl}/api/users`, params, { headers });
-  }
+    const formData = new FormData();
+    formData.append('FirstName', firstname);
+    formData.append('LastName', lastname);
+    formData.append('Email', email);
+    formData.append('Password', password);
+    formData.append('Username', username);
+    formData.append('Birthday', birthday.toISOString());
 
+    return this.http.post<any>(`${this.apiUrl}/api/users`, formData);
+  }
 }

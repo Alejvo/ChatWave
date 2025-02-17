@@ -55,10 +55,33 @@ LEFT JOIN Users fri ON fri.Id = f.FriendId
 WHERE u.Id = @Id
 END
 
-CREATE PROCEDURE LoginUser @Email varchar(100), @Password varchar(100)
+alter PROCEDURE LoginUser @Email varchar(100), @Password varchar(100)
 AS
 BEGIN
-	SELECT * FROM Users WHERE Email=@Email AND Password=@Password
+	SELECT     
+		u.Id,
+		u.FirstName,
+		u.LastName,
+		u.Email,
+		u.Password,
+		u.Birthday,
+		u.UserName,
+		u.ProfileImage,
+		g.Id,
+		g.Name,
+		g.Description,
+		g.Image,
+		fri.Id,
+		fri.UserName,
+		fri.FirstName,
+		fri.LastName,
+		fri.ProfileImage
+	FROM Users u
+	LEFT JOIN Group_User gu ON gu.UserId = u.Id
+	LEFT JOIN Groups g ON g.Id = gu.GroupId
+	LEFT JOIN Friends f ON f.UserId = u.Id
+	LEFT JOIN Users fri ON fri.Id = f.FriendId
+	WHERE u.Email=@Email AND u.Password=@Password
 END
 ALter PROCEDURE GetUsersByUsername @Username varchar(100)
 AS

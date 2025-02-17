@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using Application.Users.Common;
 using Application.Users.Create;
 using Application.Users.Delete;
 using Application.Users.GetAll;
@@ -19,12 +20,14 @@ namespace WebApi.Controllers
         private readonly ISender _sender;
         private readonly IUserRepository _userRepository;
         private readonly IAuthService _authService;
+        private readonly IUserCacheService _userCacheService;
 
-        public UsersController(ISender sender, IUserRepository userRepository, IAuthService authService)
+        public UsersController(ISender sender, IUserRepository userRepository, IAuthService authService, IUserCacheService userCacheService)
         {
             _sender = sender;
             _userRepository = userRepository;
             _authService = authService;
+            _userCacheService = userCacheService;
         }
 
         [HttpPost]
@@ -52,17 +55,26 @@ namespace WebApi.Controllers
         [HttpGet("id/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
+            var cachedUser = await _userCacheService.GetUserCacheAsync<UserResponse>(id);
+           if (cachedUser is not null)
+                return Ok(cachedUser);
+
             var command = new GetUserByIdQuery(id);
             var res = await _sender.Send(command);
-            return res.IsSuccess ? Ok(res) : Problem(res.Errors);
+
+            if(res.IsSuccess && res.Value is not null) 
+                await _userCacheService.SetUserCacheAsync(id,res.Value, TimeSpan.FromMinutes(30));
+
+            return res.IsSuccess ? Ok(res.Value) : Problem(res.Errors);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] UpdateUserCommand command)
         {
             var res = await _sender.Send(command);
-            return res.IsSuccess ? NoContent() : Problem(res.Errors);
+            await _userCacheService.RemoveUserCacheAsync(command.Id);
 
+            return res.IsSuccess ? NoContent() : Problem(res.Errors);
         }
 
         [HttpDelete("id/{id}")]
@@ -85,6 +97,9 @@ namespace WebApi.Controllers
             var refreshToken = _authService.GenerateRefreshToken();
 
             await _authService.SaveRefreshToken(user.Id, refreshToken);
+            await _userCacheService.RemoveUserCacheAsync(user.Id);
+            await _userCacheService.SetUserCacheAsync(user.Id,user.ToUserResponse(),TimeSpan.FromMinutes(30));
+
             return Ok(new { token, refreshToken });
         }
 

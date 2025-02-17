@@ -174,12 +174,51 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> LoginUser(string email, string password)
     {
-        using var connection = _sqlConnection.CreateConnection();
+        /*using var connection = _sqlConnection.CreateConnection();
         var user = await connection.QuerySingleOrDefaultAsync<User>(
             UserProcedures.LoginUser.ToString(),
             new { email, password },
             commandType: CommandType.StoredProcedure);
-        return user;
+        return user;*/
+
+        using var connection = _sqlConnection.CreateConnection();
+        var userDictionary = new Dictionary<string, User>();
+        await connection.QueryAsync<User, Group, User, User>(
+            UserProcedures.LoginUser.ToString(),
+            (user, group, friend) =>
+            {
+                if (!userDictionary.TryGetValue(user.Id, out var userEntry))
+                {
+                    userEntry = user;
+                    userEntry.Groups = new List<Group>();
+                    userEntry.Friends = new List<Friend>();
+                    userDictionary.Add(userEntry.Id, userEntry);
+                }
+                if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
+                {
+                    var newGroup = Group.Create(group.Id, group.Name, group.Description, group.Image);
+                    userEntry.Groups.Add(newGroup);
+                }
+                if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
+                {
+                    var newFriend = new Friend
+                    {
+                        Id = friend.Id,
+                        FirstName =  friend.FirstName,
+                        LastName = friend.LastName,
+                        Username = friend.Username,
+                        ProfileImage = friend.ProfileImage
+                    };
+
+                    userEntry.Friends.Add(newFriend);
+                }
+                return userEntry;
+            },
+            param: new { email,password },
+            commandType: CommandType.StoredProcedure,
+            splitOn: "Id,Id"
+            );
+        return userDictionary.Values.FirstOrDefault();
     }
 
     public async Task UpdateAsync(UserRequest user)

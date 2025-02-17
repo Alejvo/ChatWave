@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
 
 builder.Services
     .AddInfrastructure()
-    .AddApplication();
+    .AddApplication(builder.Configuration);
 
 builder.Services.AddTransient<ErrorHandlingMiddleware>();
 

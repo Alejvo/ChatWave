@@ -1,4 +1,4 @@
-### ChatWave
+# ChatWave
 ## Purpose
 **ChatWave** is a project which purpose is be a new and interesting way to chat with your family and friends.
 ## How to use
@@ -21,8 +21,8 @@ If the terminal didn't show any error. You now can access the webpage on the rou
 | --- | --- | --- | --- | --- | --- |
 | POST | /api/messages/user | Send a message to an user | FromBody || { <br> &nbsp;&nbsp;"text" :  "string", "originId" : "string", "destinyId" : "string", "sentAt" : "date" <br>} |
 | POST | /api/messages/group | Send a message to an existing group | FromBody || { <br> &nbsp;&nbsp;"text" :  "string", "userId" : "string", "groupId" : "string", "sentAt" : "date" <br>} |
-| GET | /api/messages/user | Get the messages between two users | FromBody || receiverId <br> senderId |
-| GET | /api/messages/group | Get the messages from an existing group | FromBody || receiverId <br> senderId |
+| GET | /api/messages/user | Get the messages between two users | FromQuery | receiverId <br> senderId ||
+| GET | /api/messages/group | Get the messages from an existing group | FromQuery | receiverId <br> senderId ||
 ### Friends
 | Method | Endpoints | Action | Source |Params | Body |
 | --- | --- | --- | --- | --- | --- |
