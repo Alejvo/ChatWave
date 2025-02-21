@@ -135,6 +135,80 @@
 
         }
     }
+
+    .filters-row {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        gap: 10px;
+        .select-container{
+            position: relative;
+            display: inline-block;
+            width: 130px;
+            .select-icon {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                pointer-events: none;
+                color: white;
+                }
+            .filters-select {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+
+                width: 100%;
+                color: $White;
+                font-size: 16px;
+                background-color: $DimGray;
+                padding: 10px;
+                padding-right: 40px;
+                cursor: pointer;
+                border: none;
+                color: $White;
+                border-radius: 5px;
+                &:focus {
+                    background-color: $LighterDimGray;
+                }        
+                option {
+                    color: $White;
+                }
+            }
+
+        }
+        .pagination{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap:5px;
+
+            .arrow-button{
+            background-color: transparent;
+            border: none;
+            outline: none;
+
+            .mat-icon {
+                color: $DarkGray;
+                font-size: 30px;
+                }
+            }
+
+            .pagination-numbers{
+                font-size: 20px;
+                color: $Black;
+                &:hover,
+                &:active {
+                    border-bottom: 2px solid $DarkGray;
+                    color: $DarkGray;
+                    cursor: pointer;
+                }   
+            }
+            
+        }
+
+    }
 }
 
 .close {

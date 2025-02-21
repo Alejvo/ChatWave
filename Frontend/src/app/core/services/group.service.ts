@@ -21,17 +21,16 @@ export class GroupService {
   getGroups(
     page: number,
     pageSize: number,
-    searchTerm?: string,
-    sortColumn?: string,
-    sortOrder?: string
+    searchTerm: string,
+    sortColumn: string, 
+    sortOrder: string
   ): Observable<PagedList<group>> {
     let params = new HttpParams()
       .set('page', page.toString())
-      .set('pageSize', pageSize.toString());
-
-    if (searchTerm) params.set('searchTerm', searchTerm);
-    if (sortColumn) params.set('sortColumn', sortColumn);
-    if (sortOrder) params.set('sortOrder', sortOrder);
+      .set('pageSize', pageSize.toString())
+      .set('searchTerm', searchTerm)
+      .set('sortColumn', sortColumn)
+      .set('sortOrder', sortOrder)
 
     return this.http.get<group[]>(`${this.apiUrl}/api/groups`,{ params })
     .pipe(map((response: any) => response.value));

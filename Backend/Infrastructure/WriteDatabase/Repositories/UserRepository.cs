@@ -174,13 +174,6 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> LoginUser(string email, string password)
     {
-        /*using var connection = _sqlConnection.CreateConnection();
-        var user = await connection.QuerySingleOrDefaultAsync<User>(
-            UserProcedures.LoginUser.ToString(),
-            new { email, password },
-            commandType: CommandType.StoredProcedure);
-        return user;*/
-
         using var connection = _sqlConnection.CreateConnection();
         var userDictionary = new Dictionary<string, User>();
         await connection.QueryAsync<User, Group, User, User>(

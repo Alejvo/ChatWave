@@ -13,8 +13,6 @@
         <span class="icon_tool-tip">Add Person</span>
     </button>
 
-
-
     <button class="icon" (click)="toggleModal('addGroup')">
         <mat-icon>group_add</mat-icon>
         <span class="icon_tool-tip">Add Group</span>
@@ -31,7 +29,9 @@
     </button>
 
 </div>
-<app-add-user [isVisible]="modals.addUser" (closeModalEvent)="toggleModal('addUser')"></app-add-user>
+<app-add-user 
+    [isVisible]="modals.addUser" 
+    (closeModalEvent)="toggleModal('addUser')"></app-add-user>
 <app-add-group [isVisible]="modals.addGroup" (closeModalEvent)="toggleModal('addGroup')"></app-add-group>
 <app-create-group [isVisible]="modals.createGroup" (closeModalEvent)="toggleModal('createGroup')"></app-create-group>
 <app-friend-requests [isVisible]="modals.friendRequest" (closeModalEvent)="toggleModal('friendRequest')"></app-friend-requests>

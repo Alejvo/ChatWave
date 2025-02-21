@@ -2,10 +2,32 @@
 <div class="modal-content" *ngIf="isVisible">
     <span class="close" (click)="closeModal()">&times;</span>
     <div class="modal-search">
-        <input #nameInput placeholder="Find a user" class="search-input" (keyup.enter)="filterGroups(1,2)">
-        <div class="search-icon" (click)="filterGroups(1,2)">
+        <input #nameInput placeholder="Find a group" class="search-input" (keyup.enter)="getGroups(1)">
+        <div class="search-icon" (click)="getGroups(1)">
             <mat-icon>search</mat-icon>
         </div>
+    </div>
+    <div class="filters-row">
+            <div class="select-container">
+                <select [(ngModel)]="sortOrder" class="filters-select">
+                    <option selected value="asc">Ascendent</option>
+                    <option value="desc">Descendent</option>
+                </select>
+                <span class="material-icons select-icon">arrow_drop_down</span>
+            </div>
+        
+            <div class="pagination">
+                <button class="arrow-button" (click)="goToPage(currentPage - 1)">
+                    <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <a class="pagination-numbers" *ngFor="let page of [].constructor(totalPages);let i = index"
+                    (click)="goToPage(i +1)">
+                    {{i + 1}}
+                </a>
+                <button class="arrow-button" (click)="goToPage(currentPage + 1)">
+                    <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+            </div>
     </div>
     <div class="search-result">
         <div class="result-info" *ngFor="let item of groups">

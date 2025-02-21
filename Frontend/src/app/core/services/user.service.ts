@@ -4,7 +4,6 @@ import { environment } from 'src/environments/environment';
 import { user } from '../models/user';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { PagedList } from '../models/pagedList';
-import { friend } from '../models/friend';
 
 @Injectable({
   providedIn: 'root'
@@ -31,18 +30,17 @@ export class UserService {
     page:number,
     pageSize:number,
     currentUserId:string,
-    searchTerm?:string,
-    sortColumn?:string,
-    sortOrder?:string
+    searchTerm:string,
+    sortColumn:string,
+    sortOrder:string
   ): Observable<PagedList<user>> {
     let params:HttpParams = new HttpParams()
-      .set('page',page.toString())
+      .set('page',page.toString())  
       .set('pageSize',pageSize.toString())
-      .set('currentUserId', currentUserId);
-
-    if (searchTerm) params.set('searchTerm', searchTerm);
-    if (sortColumn) params.set('sortColumn', sortColumn);
-    if (sortOrder) params.set('sortOrder', sortOrder);
+      .set('currentUserId', currentUserId)
+      .set('searchTerm', searchTerm)
+      .set('sortColumn', sortColumn)
+      .set('sortOrder', sortOrder);
 
     return this.http.get(`${this.apiUrl}/api/users`,{ params })
     .pipe(
@@ -56,14 +54,16 @@ export class UserService {
     email: string,
     password: string,
     username: string,
-    birthday: Date): Observable<HttpResponse<any>> {
+    birthday: Date,
+    profilePhoto : File): Observable<HttpResponse<any>> {
     const formData = new FormData();
     formData.append('FirstName', firstname);
     formData.append('LastName', lastname);
     formData.append('Email', email);
     formData.append('Password', password);
     formData.append('Username', username);
-    formData.append('Birthday', birthday.toISOString());
+    formData.append('Birthday', birthday.toISOString())
+    formData.append('ProfilePhoto',profilePhoto);
 
     return this.http.post<any>(`${this.apiUrl}/api/users`, formData);
   }

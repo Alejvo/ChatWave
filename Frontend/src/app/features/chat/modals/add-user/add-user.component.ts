@@ -12,10 +12,18 @@ import { friend } from 'src/app/core/models/friend';
 export class AddUserComponent implements OnInit{
   @Input() isVisible: boolean = false;
   @Output() closeModalEvent = new EventEmitter<void>();
+  
+
+
   public appUser:user | null = null; 
   result!: user[];
   friendSet:Set<string> = new Set();
-
+  currentPage: number = 1;
+  pageSize: number = 3;
+  totalPages :number =0;
+  searchTerm : string ='';
+  sortColumn : string = 'username';
+  sortOrder : string = 'asc';
   constructor(
     private userService: UserService,
     private friendService:FriendService
@@ -31,26 +39,39 @@ export class AddUserComponent implements OnInit{
     })
   }
   
+  goToPage(page:number){
+    if(page >=1 && page <= this.totalPages) this.getUsers(page);
+  }
+
   makeRequest(friendId: string) {
     let userId = this.appUser?.id;
     
     this.friendService.makeFriendRequest(userId!, friendId).subscribe({
       next: (res) => {
         if (res.status === 204) {
-          console.log(`${this.appUser?.username} sended a friend request to: ${friendId}`);
+          console.log(`${this.appUser?.username}
+            sended a friend request to: ${friendId}`);
         }
       }
     })
   }
   
-  getUsers(page:number,pageSize:number) {
-    this.userService.getUsers(page,pageSize,this.appUser!.id).subscribe({
-      next: (data) => {
-        //console.log(data.items);
-        this.result = data.items;
-        //let friendId = this.appUser?.friends.map(friend => friend.id) || []
-        //this.result = data.filter(user => user.id !== this.appUser?.id && !friendId.includes(user.id))
-      }
+  getUsers(page:number) {
+    if(!this.appUser) return;
+
+    this.userService.getUsers(
+      page,
+      this.pageSize,
+      this.appUser!.id,
+      this.searchTerm,
+      this.sortColumn,
+      this.sortOrder).subscribe({
+      next: (data) => 
+        { 
+          this.result = data.items; 
+          this.totalPages = data.totalPages;
+          this.currentPage = data.page;
+        }
     })
   }
 

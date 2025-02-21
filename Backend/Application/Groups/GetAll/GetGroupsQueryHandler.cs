@@ -30,7 +30,7 @@ namespace Application.Groups.GetAll
                 _ => group => group.Id
             };
 
-            groupResponseQuery = request.SortOrder is not null
+            groupResponseQuery = request.SortOrder == "desc"
                 ? groupResponseQuery.OrderByDescending(keySelector)
                 : groupResponseQuery.OrderBy(keySelector);
 

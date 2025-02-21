@@ -15,6 +15,12 @@ export class AddGroupComponent  implements OnInit{
   @Output() closeModalEvent = new EventEmitter<void>();
   groups!: group[];
   private appUser: user | null = null;
+  currentPage: number = 1;
+  pageSize: number = 3;
+  totalPages: number = 0;
+  searchTerm: string = '';
+  sortColumn: string = 'name';
+  sortOrder: string = 'asc';
 
   constructor(
     private userService: UserService,
@@ -23,13 +29,29 @@ export class AddGroupComponent  implements OnInit{
   ngOnInit(): void {
     this.appUser = this.userService.getUser();
   }
-  filterGroups(page: number, pageSize: number) {
-    this.groupService.getGroups(page, pageSize).subscribe({
+
+  goToPage(page: number) {
+    if (page >= 1 && page <= this.totalPages) this.getGroups(page);
+  }
+
+  getGroups(page: number) {
+    if(!this.appUser) return;
+
+    this.groupService.getGroups(
+      page, 
+      this.pageSize,
+      this.searchTerm,
+      this.sortColumn,
+      this.sortOrder
+    ).subscribe({
       next: (res) => {
         this.groups = res.items;
+        this.totalPages = res.totalPages;
+        this.currentPage = res.page;
       }
     })
   }
+
   joinGroup(groupId: string) {
     let userId = this.appUser?.id;
     console.log(`${this.appUser?.username} send a friend joined to: ${groupId }`);

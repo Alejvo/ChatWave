@@ -35,10 +35,10 @@ namespace Application.Users.GetAll
                 _ => user => user.Id
             };
 
-            userResponseQuery = request.SortOrder is not null
+            userResponseQuery = request.SortOrder == "desc"
                 ? userResponseQuery.OrderByDescending(keySelector)
                 : userResponseQuery.OrderBy(keySelector);
-
+                
             userResponseQuery = userResponseQuery.ToList();
 
             var users = await PagedList<UserResponse>.CreateAsync(
