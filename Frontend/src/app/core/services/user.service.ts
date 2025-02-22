@@ -55,7 +55,7 @@ export class UserService {
     password: string,
     username: string,
     birthday: Date,
-    profilePhoto : File): Observable<HttpResponse<any>> {
+    profileImage : File): Observable<HttpResponse<any>> {
     const formData = new FormData();
     formData.append('FirstName', firstname);
     formData.append('LastName', lastname);
@@ -63,7 +63,7 @@ export class UserService {
     formData.append('Password', password);
     formData.append('Username', username);
     formData.append('Birthday', birthday.toISOString())
-    formData.append('ProfilePhoto',profilePhoto);
+    formData.append('ProfileImage',profileImage);
 
     return this.http.post<any>(`${this.apiUrl}/api/users`, formData);
   }
