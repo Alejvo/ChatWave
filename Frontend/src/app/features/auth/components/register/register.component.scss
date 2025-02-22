@@ -20,10 +20,12 @@
     z-index: 5000;
     width: 80%;
     max-width: 600px;
+    max-height: 600px;
     padding: 15px 20px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    overflow: scroll;
 
     .register-title {
         text-align: left;
@@ -172,6 +174,32 @@
             &:disabled {
                 filter: opacity(0.5);
                 cursor: not-allowed;
+            }
+        }
+
+    }
+    @media screen and (max-width:1000px){
+        & {
+            width: 95%;
+
+            .register-form {
+                top: 10px;
+                display: flex;
+                flex-direction: column;
+                padding: 0;
+
+                .birthday-container{
+                    width: 100%;
+                    .register-select{
+                        flex-direction: column;
+                        gap: 20px 0;
+                        justify-content: left;
+
+                        select{
+                            width: 100%;
+                        }
+                    }
+                }
             }
         }
     }

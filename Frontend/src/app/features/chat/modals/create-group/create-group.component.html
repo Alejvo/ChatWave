@@ -2,14 +2,23 @@
 <div class="modal-content" *ngIf="isVisible">
     <span class="close" (click)="closeModal()">&times;</span>
     <p class="title">Create A Group</p>
-    <form class="form" #createGroupForm="ngForm" (ngSubmit)="createGroup()">
+    <form class="form" #createGroupForm="ngForm" (ngSubmit)="createGroup(createGroupForm)">
         <label for="name" class="form-label">Name:
         </label>
-        <input [(ngModel)]="groupRequest.name" name="name" class="form-input" id="name">
+        <input name="name" class="form-input" id="name" ngModel required>
         <label for="description" class="form-label">Description:</label>
-        <textarea name="description" class="form-textarea" id="descrption"
-            [(ngModel)]="groupRequest.description"></textarea>
-        <input type="submit" value="Create Group" class="form-button">
+        <textarea name="description" class="form-textarea" id="descrption"ngModel required>
+        </textarea>
+        <div class="image-container" id="imageInput">
+            <label for="image">Profile Image</label>
+            <input type="file" 
+                accept="image/*" 
+                id="profileImage" 
+                name="image" 
+                (change)="onFileSelected($event)"
+                required />
+        </div>
+        <input type="submit" value="Create Group" class="form-button" [disabled]="!image || !createGroupForm.valid">
     </form>
 </div>
 

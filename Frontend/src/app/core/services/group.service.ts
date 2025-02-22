@@ -13,11 +13,19 @@ export class GroupService {
   private apiUrl = environment.apiUrl;
   constructor(private http:HttpClient) { }
 
-  createGroup(name: string, description: string): Observable<HttpResponse<any>> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = { name, description }
-    return this.http.post<any>(`${this.apiUrl}/api/groups`, params, { headers })
+  createGroup(
+    name: string, 
+    description: string,
+    image : File
+  ): Observable<HttpResponse<any>> {
+    const formData = new FormData();
+    formData.append('Name',name)
+    formData.append('Description',description)
+    formData.append('Image',image)
+
+    return this.http.post<any>(`${this.apiUrl}/api/groups`, formData)
   }
+  
   getGroups(
     page: number,
     pageSize: number,

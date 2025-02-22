@@ -1,4 +1,5 @@
-﻿using Application.Friends.AddFriend;
+﻿using Application.Abstractions;
+using Application.Friends.AddFriend;
 using Application.Friends.GetRequests;
 using Application.Friends.MakeRequest;
 using Application.Friends.RemoveFriend;
@@ -14,10 +15,12 @@ namespace WebApi.Controllers;
 public class FriendsController : ApiController
 {
     private readonly ISender _sender;
+    private readonly IUserCacheService _userCache;
 
-    public FriendsController(ISender sender)
+    public FriendsController(ISender sender, IUserCacheService userCache)
     {
         _sender = sender;
+        _userCache = userCache;
     }
 
     [HttpPost]

@@ -11,17 +11,28 @@ export class CreateGroupComponent {
   @Input() isVisible: boolean = false;
   @Output() closeModalEvent = new EventEmitter<void>();
   @ViewChild('createGroupForm') form !: NgForm;
-  groupRequest = {
-    name: '',
-    description: ''
-  };
+  image: File | null = null
+
   constructor(private groupService: GroupService) { }
-  public createGroup() {
-    this.groupService.createGroup(this.groupRequest.name, this.groupRequest.description).subscribe()
-    this.groupRequest.name = '';
-    this.groupRequest.description = '';
+
+  public createGroup(form:NgForm) {
+    const { name,description } = form.value;
+    this.groupService.createGroup(
+      name, 
+      description,
+      this.image!
+    ).subscribe()
+    this.form.reset();
     this.closeModal();
   }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.image = input.files[0];
+    }
+  }
+
   closeModal() {
     this.closeModalEvent.emit();
   }

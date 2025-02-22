@@ -15,7 +15,6 @@ export class FriendRequestsComponent {
   public appUser:user | null = null; 
   result!: friend[];
 
-
   constructor(
     private userService: UserService,
     private friendService:FriendService

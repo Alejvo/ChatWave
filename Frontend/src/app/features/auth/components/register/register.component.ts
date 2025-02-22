@@ -15,15 +15,7 @@ export class RegisterComponent {
   days: number[] = Array.from({ length: 31 }, (_, i) => i + 1)
   months: number[] = Array.from({ length: 12 }, (_, i) => i + 1)
   years: number[] = Array.from({ length: 100 }, (_, i) => 2025 - i)
-/*
-  registerUser = {
-    firstname: '',
-    lastname: '',
-    username: '',
-    email: '',
-    password: '',
-    birthday: { day: 0, month: 0, year: 0 }
-  }*/
+
   constructor(private userService: UserService) { }
 
   createUser(form:NgForm) {

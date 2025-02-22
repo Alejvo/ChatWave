@@ -1,10 +1,12 @@
-﻿using Application.Groups.Create;
+﻿using Application.Abstractions;
+using Application.Groups.Create;
 using Application.Groups.Delete;
 using Application.Groups.GetAll;
 using Application.Groups.GetById;
 using Application.Groups.JoinGroup;
 using Application.Groups.LeaveGroup;
 using Application.Groups.Update;
+using Application.Users.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,10 +19,12 @@ namespace WebApi.Controllers;
 public class GroupsController : ApiController
 {
     private readonly ISender _sender;
+    private IUserCacheService _userCache;
 
-    public GroupsController(ISender sender)
+    public GroupsController(ISender sender, IUserCacheService userCache)
     {
         _sender = sender;
+        _userCache = userCache;
     }
 
     [HttpPost]
@@ -65,6 +69,8 @@ public class GroupsController : ApiController
     public async Task<IActionResult> Join([FromBody] JoinGroupCommand command)
     {
         var res = await _sender.Send(command);
+        await _userCache.RemoveUserCacheAsync(command.UserId);
+
         return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 
@@ -73,6 +79,7 @@ public class GroupsController : ApiController
     public async Task<IActionResult> Leave([FromBody] LeaveGroupCommand command)
     {
         var res = await _sender.Send(command);
+        await _userCache.RemoveUserCacheAsync(command.UserId);
         return res.IsSuccess ? NoContent() : Problem(res.Errors);
     }
 }
