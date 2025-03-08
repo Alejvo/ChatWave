@@ -4,7 +4,6 @@ import { FriendService } from '../../services/friend.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { friend } from 'src/app/core/models/friend';
 import { ChatService } from '../../services/chat.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-friend-requests',

@@ -10,8 +10,6 @@
     box-shadow: 0 4px 8px rgba(27, 27, 27, 0.5);
     padding: 10px 30px;
     background-color: $LighterDimGray;
-    //grid-area: options;
-    //height: 50px;
 
     .icon {
         transition: all 0.5s ease;
@@ -133,6 +131,7 @@
             left: 0;
             z-index: 100;
             width: 100%;
+            padding: 10px;
         }
 
         .bars {

@@ -56,12 +56,10 @@ export class AddGroupComponent  implements OnInit{
 
   joinGroup(groupId: string) {
     let userId = this.appUser?.id;
-    console.log(`${this.appUser?.username} send a friend joined to: ${groupId }`);
     
     this.groupService.joinGroup(groupId!, userId!).subscribe({
       next: (res) => {
         if (res.status === 204) {
-          console.log(`${this.appUser?.username} sended a friend request to: ${groupId}`);
           this.chatService.getGroupList(this.appUser!.id);
         }
       }

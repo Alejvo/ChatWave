@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { message } from 'src/app/core/models/message';
 import { user } from 'src/app/core/models/user';
 import { UserService } from 'src/app/core/services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from 'src/app/features/auth/services/auth.service';
-import { Observable } from 'rxjs';
 import { group } from 'src/app/core/models/group';
 import { friend } from 'src/app/core/models/friend';
 
@@ -21,7 +20,6 @@ export class ChatPageComponent implements OnInit{
   friends: friend[] = [];
   
   isLoading:boolean = true;
-  //user$!:Observable<user>;
   
   messages!: message[];
   messageContent = "";
@@ -31,8 +29,6 @@ export class ChatPageComponent implements OnInit{
   isGroupsAccordionOpen: boolean = true;
   isFriendsAccordionOpen: boolean = true;
   isSent: boolean = true;
-  photo!: string;
-  imageFormat: string = 'data:image/png;base64,';
   @ViewChild('messageContainer') private messageContainer!: ElementRef;
 
   constructor(
@@ -49,7 +45,6 @@ export class ChatPageComponent implements OnInit{
       next: (data: user) => {
         this.userService.setUser(data);
         this.user = data;
-        this.photo = `${this.imageFormat},${this.user.profileImage}`;
         this.isLoading = false;
         this.chatService.startConnection().then(() => {
           this.chatService.getGroupList(this.user!.id);
@@ -71,10 +66,7 @@ export class ChatPageComponent implements OnInit{
     });
 
     this.chatService.friends$.subscribe(data => this.friends = data);
-    this.chatService.groups$.subscribe(data => {
-      this.groups = data;
-      console.log('Groups',this.groups);
-    });
+    this.chatService.groups$.subscribe(data => this.groups = data);
   }
 
   showModal() {

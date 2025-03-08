@@ -45,7 +45,7 @@
 
             </div>
         </div>
-        <app-contacts [profilePhoto]="photo" class="contacts-personalInfo" [Name]="user!.username"></app-contacts>
+        <app-contacts [profilePhoto]="'data:image/png;base64,' + user.profileImage" class="contacts-personalInfo" [Name]="user!.username"></app-contacts>
     </div>
 
     <div #messageContainer class="messages-list">

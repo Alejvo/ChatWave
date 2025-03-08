@@ -8,7 +8,6 @@
 
     .message-body {
         word-break: break-word;
-        //border-radius: 5px;
         width: 500px;
         height: auto;
         padding: 5px 10px;
@@ -37,7 +36,7 @@
 
         .message-body {
             box-shadow: 4px 4px 5px rgba(174, 174, 174, 0.4);
-            background-color: $LightGreen; // Color para mensajes enviados
+            background-color: $LightGreen;
         }
     }
 
@@ -45,7 +44,7 @@
     @media screen and (max-width:800px) {
         & {
             .message-body {
-                width: 300px;
+                width: 250px;
             }
         }
     }
