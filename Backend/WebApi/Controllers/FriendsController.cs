@@ -1,12 +1,15 @@
-﻿using Application.Abstractions;
+﻿
+using Application.Abstractions;
 using Application.Friends.AddFriend;
 using Application.Friends.GetRequests;
 using Application.Friends.MakeRequest;
 using Application.Friends.RemoveFriend;
+using Application.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace WebApi.Controllers;
 

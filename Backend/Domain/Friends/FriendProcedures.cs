@@ -5,5 +5,6 @@ public enum FriendProcedures
     MakeFriendRequest,
     AddFriend,
     RemoveFriend, 
-    GetFriendRequests 
+    GetFriendRequests,
+    GetFriendsByUser
 }

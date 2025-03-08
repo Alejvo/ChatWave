@@ -1,60 +1,88 @@
-altEr PROCEDURE AddFriend
-@UserId VARCHAR(80),
-@FriendId VARCHAR(80)
+ALTER PROCEDURE AddFriend
+    @SenderId VARCHAR(80),
+    @ReceiverId VARCHAR(80)
 AS
 BEGIN
-	IF NOT EXISTS(SELECT 1 FROM Friends WHERE UserId = @UserId AND FriendId=@FriendId )
-	AND(
-	EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @UserId AND @FriendId = @FriendId)
-	OR 
-	EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @FriendId AND @FriendId = @UserId)
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM Friends 
+        WHERE (UserId = @ReceiverId AND FriendId = @SenderId)
+           OR (UserId = @SenderId AND FriendId = @ReceiverId)
+    )
+
+    AND EXISTS (
+        SELECT 1 FROM FriendRequest 
+        WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId
+    )
+    BEGIN
+        INSERT INTO Friends (UserId, FriendId)
+        VALUES (@ReceiverId, @SenderId), (@SenderId, @ReceiverId);
+
+        DELETE FROM FriendRequest 
+        WHERE SenderId = @SenderId AND ReceiverId = @ReceiverId;
+
+   
+        COMMIT TRANSACTION;
+        RETURN 1; 
+    END
+    ELSE
+    BEGIN
+        ROLLBACK TRANSACTION;
+        RETURN 0; 
+    END
+END
+
+alter PROCEDURE RemoveFriend
+@SenderId VARCHAR(80),
+@ReceiverId VARCHAR(80)
+AS
+BEGIN
+	IF EXISTS(SELECT 1 FROM Friends WHERE UserId = @SenderId AND FriendId=@ReceiverId)
+	BEGIN
+		Delete From Friends where UserId = @SenderId AND FriendId = @ReceiverId
+
+		Delete From Friends where UserId = @ReceiverId AND FriendId = @SenderId
+	END
+END
+
+ALTER PROCEDURE MakeFriendRequest
+    @Id VARCHAR(80),
+    @SenderId VARCHAR(80),
+    @ReceiverId VARCHAR(80),
+    @SentAt DATETIME
+AS
+BEGIN
+
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM FriendRequest 
+        WHERE (SenderId = @SenderId AND ReceiverId = @ReceiverId)
+           OR (SenderId = @ReceiverId AND ReceiverId = @SenderId)
+    )
+	AND NOT EXISTS(
+		SELECT 1
+		FROM Friends
+		WHERE (UserId = @SenderId AND FriendId = @ReceiverId)
+			OR(UserId = @ReceiverId AND FriendId = @SenderId) 
 	)
-	BEGIN
-		INSERT INTO Friends(UserId,FriendId)
-		VALUES(@UserId,@FriendId)
-
-		INSERT INTO Friends(UserId,FriendId)
-		VALUES(@FriendId,@UserId)
-
-		DELETE FROM FriendRequest 
-		WHERE SenderId=@FriendId AND ReceiverId = @UserId OR 
-			  SenderId=@UserId AND ReceiverId = @FriendId
-	END
+    BEGIN
+        INSERT INTO FriendRequest (Id, SenderId, ReceiverId, SentAt)
+        VALUES (@Id, @SenderId, @ReceiverId, @SentAt)
+    END
 END
 
-CREATE PROCEDURE RemoveFriend
-@UserId VARCHAR(80),
-@FriendId VARCHAR(80)
-AS
-BEGIN
-	IF EXISTS(SELECT 1 FROM Friends WHERE UserId = @UserId AND FriendId=@FriendId)
-	BEGIN
-		Delete From Friends where UserId = @UserId AND FriendId = @FriendId
-
-		Delete From Friends where UserId = @FriendId AND FriendId = @UserId
-	END
-END
-
-Alter PROCEDURE MakeFriendRequest
-@Id VARCHAR(80),
-@UserId VARCHAR(80),
-@FriendId VARCHAR(80),
-@SentAt DATETIME
-AS
-BEGIN 
-	IF NOT EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @UserId AND @FriendId = @FriendId)
-	OR NOT EXISTS(SELECT 1 FROM FriendRequest WHERE SenderId= @FriendId AND @FriendId = @UserId)
-	BEGIN
-		INSERT INTO FriendRequest(Id,SenderId,ReceiverId,SentAt)
-		VALUES (@Id,@UserId,@FriendId,@SentAt)
-	END
-END
-
-ALTER PROCEDURE GetFriendRequests
+CREATE PROCEDURE GetFriendRequests
 @UserId VARCHAR(80)
 AS
 BEGIN 
-	SELECT se.Id,se.FirstName,se.LastName,se.Username,se.ProfileImage 
+	SELECT 
+		se.Id,
+		se.FirstName,
+		se.LastName,
+		se.Username,
+		se.ProfileImage 
 	FROM FriendRequest fr 
 	INNER JOIN Users se On fr.SenderId = se.Id
 	WHERE fr.ReceiverId = @UserId
@@ -75,3 +103,17 @@ BEGIN
 		RETURN @Result;
 END
 
+CREATE PROCEDURE GetFriendsByUser @UserId varchar(100)
+AS
+BEGIN
+SELECT
+	fri.Id,
+	fri.UserName,
+	fri.FirstName,
+	fri.LastName,
+	fri.ProfileImage
+FROM Users u
+INNER JOIN Friends f ON f.UserId = u.Id
+INNER JOIN Users fri ON fri.Id = f.FriendId
+WHERE u.Id = @UserId
+END

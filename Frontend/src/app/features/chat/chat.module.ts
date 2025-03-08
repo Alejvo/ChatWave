@@ -12,7 +12,6 @@ import { NotMessageComponent } from './components/not-message/not-message.compon
 import { OptionsComponent } from './components/options/options.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { FriendRequestsComponent } from './modals/friend-requests/friend-requests.component';
 
 

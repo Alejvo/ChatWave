@@ -50,13 +50,15 @@ public class GroupRepository : IGroupRepository
             );
     }
 
-    public async Task<IEnumerable<Group>> GetByName(string name)
+    public async Task<IEnumerable<Group>> GetByUser(string userId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        return await connection.QueryAsync<Group>(
-            GroupProcedures.GetGroupsName.ToString(),
-            new { name },
-            commandType: CommandType.StoredProcedure);
+        return await connection.QueryAsync<Group>
+            (
+                GroupProcedures.GetGroupsByUser.ToString(),
+                new { userId },
+                commandType: CommandType.StoredProcedure
+            );
     }
 
     public async Task<bool> Join(string groupId, string userId)

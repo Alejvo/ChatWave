@@ -4,7 +4,6 @@ public enum UserProcedures
 {
     GetUsers,
     GetUserById,
-    GetUsersByUsername,
     CreateUser,
     UpdateUser, 
     DeleteUser, 

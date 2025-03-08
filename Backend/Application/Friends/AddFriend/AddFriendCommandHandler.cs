@@ -22,17 +22,17 @@ internal sealed class AddFriendCommandHandler : ICommandHandler<AddFriendCommand
 
     public async Task<Result> Handle(AddFriendCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetById(request.UserId);
-        if (user == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.UserId));
+        var sender = await _userRepository.GetById(request.SenderId);
+        if (sender == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.SenderId));
 
-        var friend = await _userRepository.GetById(request.FriendId);
-        if (friend == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.FriendId));
+        var receiver = await _userRepository.GetById(request.ReceiverId);
+        if (receiver == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.ReceiverId));
 
-        var isYourFriend = await _friendRepository.IsUserYourFriend(request.UserId, request.FriendId);
-        if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(request.UserId));
+        var isYourFriend = await _friendRepository.IsUserYourFriend(request.SenderId, request.ReceiverId);
+        if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(request.SenderId));
 
-        var friendAdded = new FriendAddedEvent(user.Id,friend.Id);
-        await _friendRepository.AddFriend(request.UserId, request.FriendId);
+        var friendAdded = new FriendAddedEvent(sender.Id,receiver.Id);
+        await _friendRepository.AddFriend(sender.Id, receiver.Id);
         await _eventStore.SaveEventAsync(friendAdded,EntityType.Friend);
 
         return Result.Success();

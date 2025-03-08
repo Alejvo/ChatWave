@@ -119,46 +119,6 @@ public class UserRepository : IUserRepository
         return userDictionary.Values.FirstOrDefault();
     }
 
-    public async Task<IEnumerable<User>> GetUsersByUsername(string username)
-    {
-        using var connection = _sqlConnection.CreateConnection();
-        var userDictionary = new Dictionary<string, User>();
-        await connection.QueryAsync<User, Group, User, User>(
-            UserProcedures.GetUsersByUsername.ToString(),
-            (user, group, friend) =>
-            {
-                if (!userDictionary.TryGetValue(user.Id, out var userEntry))
-                {
-                    userEntry = user;
-                    userEntry.Groups = new List<Group>();
-                    userEntry.Friends = new List<Friend>();
-                    userDictionary.Add(userEntry.Id, userEntry);
-                }
-                if (group != null && !userEntry.Groups.Any(g => g.Name == group.Name))
-                {
-                    var newGroup = Group.Create(group.Id, group.Name, group.Description, group.Image);
-                    userEntry.Groups.Add(newGroup);
-                }
-                if (friend != null && !userEntry.Friends.Any(f => f.Id == friend.Id))
-                {
-                    var newFriend = new Friend
-                    {
-                        Id = friend.Id,
-                        FirstName = friend.FirstName,
-                        LastName = friend.LastName,
-                        Username = friend.Username,
-                        ProfileImage = friend.ProfileImage
-                    };
-                    userEntry.Friends.Add(newFriend);
-                }
-                return userEntry;
-            },
-            param: new { username },
-            commandType: CommandType.StoredProcedure,
-            splitOn: "Id,Id"
-            );
-        return userDictionary.Values;
-    }
 
     public async Task<bool> IsEmailUnique(string email)
     {

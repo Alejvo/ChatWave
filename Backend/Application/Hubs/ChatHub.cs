@@ -1,4 +1,8 @@
-﻿using Application.Messages.GetGroupMessage;
+﻿using Application.Friends.GetByUser;
+using Application.Friends.GetRequests;
+using Application.Groups.GetAll;
+using Application.Groups.GetByUser;
+using Application.Messages.GetGroupMessage;
 using Application.Messages.GetUserMessage;
 using Application.Messages.SendGroupMessage;
 using Application.Messages.SendUserMessage;
@@ -28,6 +32,7 @@ public sealed class ChatHub : Hub
             await Clients.User(originId).SendAsync("ReceiveMessage", newMessage.Value);
         }
     }
+
     public async Task GetUserMessages(string originId, string destinyId)
     {
         var messages = await _sender.Send(new GetUserMessageQuery(originId,destinyId));
@@ -40,9 +45,34 @@ public sealed class ChatHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, groupId);
         await Clients.Caller.SendAsync("ReceiveMessageHistory", messages.Value);
     }
+    
     public async Task SendMessageToGroup(string groupId, string userId, string message)
     {
         var newMessage = await _sender.Send(new SendGroupMessageCommand(message, userId, groupId, DateTime.Now));
         await Clients.Group(groupId).SendAsync("ReceiveMessage", newMessage.Value);
+    }
+
+    public async Task GetFriendList(string userId)
+    {
+        var friends = await _sender.Send(new GetFriendsByUserQuery(userId));
+        await Clients.User(userId).SendAsync("GetFriends",friends.Value);
+    }
+
+    public async Task GetGroupList(string userId)
+    {
+        var groups = await _sender.Send(new GetGroupByUserQuery(userId));
+        await Clients.User(userId).SendAsync("GetGroups",groups.Value);
+    }
+
+
+    public async Task GetFriendRequests(string userId)
+    {
+        var friendRequests = await _sender.Send(new GetFriendRequestsQuery(userId));
+        await Clients.User(userId).SendAsync("GetFriendRequests",friendRequests.Value);
+    }
+
+    public async Task NotifyFriendRequest(string destinyId, string username)
+    {
+        await Clients.User(destinyId).SendAsync("NotifyRequest", $"@{username} send you a friend request");
     }
 }

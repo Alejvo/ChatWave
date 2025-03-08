@@ -2,7 +2,7 @@
     <p class="header-logo">ChatWave</p>
     <ul class="header-list" [ngClass]="{'active':IsOpened}">
         <li class="header-item">Community</li>
-        <li class="header-item">Donwload</li>
+        <li class="header-item">Download</li>
         <li *ngIf="!isAuthenticated" class="header-item filled-button" (click)="goToLoginPage()">Sign In</li>
         <li *ngIf="isAuthenticated" class="header-item filled-button" (click)="openChat()">Open Chat</li>
         <li *ngIf="isAuthenticated" class="header-item filled-button" (click)="onLogOut()">Log Out</li>

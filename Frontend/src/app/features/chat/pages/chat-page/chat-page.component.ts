@@ -5,6 +5,8 @@ import { UserService } from 'src/app/core/services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from 'src/app/features/auth/services/auth.service';
 import { Observable } from 'rxjs';
+import { group } from 'src/app/core/models/group';
+import { friend } from 'src/app/core/models/friend';
 
 @Component({
   selector: 'app-chat-page',
@@ -15,8 +17,11 @@ export class ChatPageComponent implements OnInit{
   isModalVisible: boolean = false;
 
   user: user | null = null;
+  groups: group[] = [];
+  friends: friend[] = [];
+  
   isLoading:boolean = true;
-  user$!:Observable<user>;
+  //user$!:Observable<user>;
   
   messages!: message[];
   messageContent = "";
@@ -46,17 +51,29 @@ export class ChatPageComponent implements OnInit{
         this.user = data;
         this.photo = `${this.imageFormat},${this.user.profileImage}`;
         this.isLoading = false;
+        this.chatService.startConnection().then(() => {
+          this.chatService.getGroupList(this.user!.id);
+          this.chatService.getFriendList(this.user!.id);
+          this.chatService.getFriendRequest(this.user!.id);
+        })
+
       },
       error: (error) => console.error('Error when trying to get user', error)
     });
 
-    this.chatService.startConnection();
+    
     this.chatService.messageReceived$.subscribe(data => this.messages.push(data));
     this.chatService.messageHistory$.subscribe({
       next: (data) => {
         this.messages = data;
         this.scrollToBottom();
       }
+    });
+
+    this.chatService.friends$.subscribe(data => this.friends = data);
+    this.chatService.groups$.subscribe(data => {
+      this.groups = data;
+      console.log('Groups',this.groups);
     });
   }
 

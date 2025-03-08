@@ -3,7 +3,7 @@
 public enum GroupProcedures
 {
     GetGroupById,
-    GetGroupsName,
+    GetGroupsByUser,
     GetGroups, 
     JoinGroup,
     LeaveGroup, 

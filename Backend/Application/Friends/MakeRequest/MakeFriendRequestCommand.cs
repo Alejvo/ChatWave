@@ -3,6 +3,6 @@
 namespace Application.Friends.MakeRequest;
 
 public sealed record MakeFriendRequestCommand(
-    string UserId,
-    string FriendId
+    string SenderId,
+    string ReceiverId
     ) : ICommand;

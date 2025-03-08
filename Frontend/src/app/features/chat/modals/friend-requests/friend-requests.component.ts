@@ -3,6 +3,8 @@ import { user } from 'src/app/core/models/user';
 import { FriendService } from '../../services/friend.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { friend } from 'src/app/core/models/friend';
+import { ChatService } from '../../services/chat.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-friend-requests',
@@ -17,7 +19,8 @@ export class FriendRequestsComponent {
 
   constructor(
     private userService: UserService,
-    private friendService:FriendService
+    private friendService:FriendService,
+    private chatService:ChatService,
   ) { }
 
   ngOnInit(){
@@ -26,16 +29,22 @@ export class FriendRequestsComponent {
       setTimeout(() => this.getRequests());
     }
   }
-  acceptRequest(friendId:string){
-    this.friendService.addFriend(this.appUser!.id,friendId).subscribe();
-    this.result.filter(item => item.id !== friendId)
+  acceptRequest(senderId:string){
+    this.friendService.addFriend(senderId, this.appUser!.id).subscribe(
+      {next:(response)=>{
+        if(response.status === 204){
+          this.chatService.getFriendList(senderId);
+          this.chatService.getFriendList(this.appUser!.id);
+        }
+      }}
+    );
+    this.result  = this.result.filter(item => item.id !== senderId)
   }  
   getRequests() {
-    this.friendService.getRequests(this.appUser!.id).subscribe({
+    this.chatService.friendRequest$.subscribe({
       next:(data)=>{
         this.result = data;
-      }
-    })
+    }})
   }
 
   closeModal() {

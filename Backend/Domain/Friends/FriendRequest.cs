@@ -3,18 +3,23 @@
 public sealed class FriendRequest
 {
     public string Id { get; set; }
-    public string UserId { get; set; }
-    public string FriendId { get; set; }
+    public string SenderId { get; set; }
+    public string ReceiverId { get; set; }
     public DateTime SentAt { get; set; }
 
-    private FriendRequest(string id, string userId, string friendId, DateTime sentAt)
+    private FriendRequest(string id, string senderId, string receiverId, DateTime sentAt)
     {
         Id = id;
-        UserId = userId;
-        FriendId = friendId;
+        SenderId = senderId;
+        ReceiverId = receiverId;
         SentAt = sentAt;
     }
 
-    public static FriendRequest Create(string id, string userId, string friendId, DateTime sentAt) => new (id,userId,friendId,sentAt);
+    public static FriendRequest Create(string senderId, string receiverId)
+    {
+        var now = DateTime.UtcNow;
+        var id = Guid.NewGuid().ToString();
 
+        return new FriendRequest(id,senderId,receiverId,now);
+    }
 }

@@ -3,6 +3,6 @@
 namespace Application.Friends.RemoveFriend;
 
 public sealed record RemoveFriendCommand(
-    string UserId,
-    string FriendId
+    string SenderId,
+    string ReceiverId
     ) : ICommand;

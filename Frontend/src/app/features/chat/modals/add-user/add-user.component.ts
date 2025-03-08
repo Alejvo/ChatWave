@@ -3,6 +3,7 @@ import { user } from 'src/app/core/models/user';
 import { UserService } from 'src/app/core/services/user.service';
 import { FriendService } from '../../services/friend.service';
 import { friend } from 'src/app/core/models/friend';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-add-user',
@@ -19,14 +20,15 @@ export class AddUserComponent implements OnInit{
   result!: user[];
   friendSet:Set<string> = new Set();
   currentPage: number = 1;
-  pageSize: number = 3;
+  pageSize: number = 5;
   totalPages :number =0;
   searchTerm : string ='';
   sortColumn : string = 'username';
   sortOrder : string = 'asc';
   constructor(
     private userService: UserService,
-    private friendService:FriendService
+    private friendService:FriendService,
+    private chatService:ChatService
   ) { }
 
   ngOnInit(){
@@ -44,14 +46,12 @@ export class AddUserComponent implements OnInit{
   }
 
   makeRequest(friendId: string) {
-    let userId = this.appUser?.id;
+    let userId = this.appUser!.id;
     
-    this.friendService.makeFriendRequest(userId!, friendId).subscribe({
+    this.friendService.makeFriendRequest(userId, friendId).subscribe({
       next: (res) => {
-        if (res.status === 204) {
-          console.log(`${this.appUser?.username}
-            sended a friend request to: ${friendId}`);
-        }
+        this.chatService.notifyRequest(friendId,this.appUser!.username);
+        this.chatService.getFriendRequest(friendId);
       }
     })
   }

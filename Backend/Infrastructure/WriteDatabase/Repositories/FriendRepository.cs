@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using Azure.Core;
+using Dapper;
 using Domain.Friends;
 using Domain.Users;
 using Infrastructure.WriteDatabase.Factories;
@@ -14,10 +15,16 @@ public class FriendRepository : IFriendRepository
         _sqlConnection = sqlConnection;
     }
 
-    public async Task AddFriend(string userId, string friendId)
+    public async Task AddFriend(string senderId, string receiverId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.AddFriend.ToString(), new { userId, friendId });
+        await connection.QueryAsync(FriendProcedures.AddFriend.ToString(), new { senderId, receiverId });
+    }
+
+    public async Task<IEnumerable<Friend>> GetByUser(string userId)
+    {
+        using var connection = _sqlConnection.CreateConnection();
+        return await connection.QueryAsync<Friend>(FriendProcedures.GetFriendsByUser.ToString(), new { userId });
     }
 
     public async Task<IEnumerable<Friend>> GetFriendRequests(string userId)
@@ -32,15 +39,16 @@ public class FriendRepository : IFriendRepository
         return await connection.QuerySingleAsync<bool>("SELECT dbo.IsUserYourFriend(@UserId, @FriendId)", new { userId, friendId });
     }
 
-    public async Task MakeFriendRequest(FriendRequest request)
+    public async Task MakeFriendRequest(string senderId, string receiverId)
     {
+        var request = FriendRequest.Create(senderId, receiverId);
         using var connection = _sqlConnection.CreateConnection();
         await connection.QueryAsync(FriendProcedures.MakeFriendRequest.ToString(), request);
     }
 
-    public async Task RemoveFriend(string userId, string friendId)
+    public async Task RemoveFriend(string senderId, string receiverId)
     {
         using var connection = _sqlConnection.CreateConnection();
-        await connection.QueryAsync(FriendProcedures.RemoveFriend.ToString(), new { userId, friendId });
+        await connection.QueryAsync(FriendProcedures.RemoveFriend.ToString(), new { senderId, receiverId });
     }
 }

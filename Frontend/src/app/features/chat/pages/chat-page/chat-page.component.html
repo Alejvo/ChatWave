@@ -15,7 +15,7 @@
                     </button>
                 </div>
                 <ng-container *ngIf="user !== null; else noFriends">
-                    <div class="friends-container" *ngFor="let friend of user.friends">
+                    <div class="friends-container" *ngFor="let friend of friends">
                         <app-contacts [Name]="friend.username" (messagesEvent)="loadHistory(friend.id,'friend')"
                             [profilePhoto]="'data:image/png;base64,' + friend.profileImage"></app-contacts>
                     </div>
@@ -33,7 +33,7 @@
                     </button>
                 </div>
                 <ng-container *ngIf="user !== null; else noGroups">
-                    <div class="groups-container" *ngFor="let group of user.groups">
+                    <div class="groups-container" *ngFor="let group of groups">
                         <app-contacts [Name]="group.name" (messagesEvent)="loadHistory(group.id,'group')"
                             [profilePhoto]="'data:image/png;base64,' + group.image"></app-contacts>
                     </div>

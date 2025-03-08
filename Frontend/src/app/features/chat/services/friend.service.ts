@@ -11,7 +11,6 @@ import { environment } from 'src/environments/environment';
 export class FriendService {
 
   private apiUrl = environment.apiUrl;
-  private appUser: user | null = null;
     
   constructor(private http: HttpClient) { }
 
@@ -23,19 +22,19 @@ export class FriendService {
     );
   }
 
-  makeFriendRequest(userId: string, friendId: string): Observable<HttpResponse<any>> {
+  makeFriendRequest(senderId: string, receiverId: string): Observable<HttpResponse<any>> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const params = { userId, friendId }
+    const params = { senderId, receiverId }
     return this.http.post<any>(`${this.apiUrl}/api/friends/request`, params, { headers, observe: 'response' })
   }
 
-  addFriend(userId: string, friendId: string): Observable<HttpResponse<any>> {
+  addFriend(senderId: string, receiverId: string): Observable<HttpResponse<any>> {
       const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-      const params = { userId, friendId }
+    const params = { senderId, receiverId }
       return this.http.post<any>(`${this.apiUrl}/api/friends/add`, params, { headers, observe: 'response' })
     }
 
-  removeFriend(userId: string, friendId: string){
+  removeFriend(senderId: string, receiverId: string){
 
   }
 }

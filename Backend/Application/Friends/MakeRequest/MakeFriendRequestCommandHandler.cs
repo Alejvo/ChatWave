@@ -19,19 +19,17 @@ internal sealed class MakeFriendRequestCommandHandler : ICommandHandler<MakeFrie
 
     public async Task<Result> Handle(MakeFriendRequestCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetById(request.UserId);
-        if (user == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.UserId));
+        var sender = await _userRepository.GetById(request.SenderId);
+        if (sender == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.SenderId));
 
-        var friend = await _userRepository.GetById(request.FriendId);
-        if (friend == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.FriendId));
+        var receiver = await _userRepository.GetById(request.ReceiverId);
+        if (receiver == null) return Result.Failure<IEnumerable<UserMessage>>(UserErrors.NotFound(request.ReceiverId));
 
-        var isYourFriend = await _friendRepository.IsUserYourFriend(request.UserId,request.FriendId);
-        if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(request.UserId));
+        var isYourFriend = await _friendRepository.IsUserYourFriend(sender.Id,receiver.Id);
+        if (isYourFriend) return Result.Failure<IEnumerable<UserMessage>>(FriendErrors.UserIsAlreadyYourFriend(sender.Id));
 
-        var id = Guid.NewGuid().ToString();
-        var sentAt = DateTime.UtcNow;
-        var friendRequest = FriendRequest.Create(id,request.UserId,request.FriendId,sentAt);
-        await _friendRepository.MakeFriendRequest(friendRequest);
+        await _friendRepository.MakeFriendRequest(sender.Id,receiver.Id);
+
         return Result.Success();
     }
 }

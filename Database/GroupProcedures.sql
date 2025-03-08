@@ -81,3 +81,17 @@ BEGIN
 		WHERE GroupId=@GroupId AND UserId = @UserId
 	END
 END
+
+CREATE PROCEDURE GetGroupsByUser @UserId VARCHAR(100)
+AS
+BEGIN
+	SELECT 
+	g.Id,
+    g.Name,
+	g.Description,
+	g.Image
+	FROM Users u
+	INNER JOIN Group_User gu ON gu.UserId = u.Id
+	INNER JOIN Groups g ON g.Id = gu.GroupId
+	WHERE u.Id = @userId
+END

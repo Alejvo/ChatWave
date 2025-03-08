@@ -6,7 +6,7 @@ public class AddFriendValidator : AbstractValidator<AddFriendCommand>
 {
     public AddFriendValidator()
     {
-        RuleFor(friend => friend.FriendId).NotEmpty();
-        RuleFor(friend => friend.UserId).NotEmpty();
+        RuleFor(friend => friend.SenderId).NotEmpty();
+        RuleFor(friend => friend.ReceiverId).NotEmpty();
     }
 }

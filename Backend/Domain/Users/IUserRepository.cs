@@ -7,7 +7,6 @@ public interface IUserRepository
     Task CreateAsync(UserRequest user);
     Task UpdateAsync(UserRequest user);
     Task DeleteAsync(string id);
-    Task<IEnumerable<User>> GetUsersByUsername(string username);
     Task<bool> IsEmailUnique(string email);
     Task<bool> IsUserNameUnique(string username);
     Task<User?> LoginUser(string email, string password);

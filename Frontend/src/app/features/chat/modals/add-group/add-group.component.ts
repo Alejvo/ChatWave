@@ -4,6 +4,7 @@ import { user } from 'src/app/core/models/user';
 import { GroupService } from 'src/app/core/services/group.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { FriendService } from '../../services/friend.service';
+import { ChatService } from '../../services/chat.service';
 
 @Component({
   selector: 'app-add-group',
@@ -24,7 +25,8 @@ export class AddGroupComponent  implements OnInit{
 
   constructor(
     private userService: UserService,
-    private groupService: GroupService) { }
+    private groupService: GroupService,
+    private chatService:ChatService) { }
 
   ngOnInit(): void {
     this.appUser = this.userService.getUser();
@@ -60,9 +62,11 @@ export class AddGroupComponent  implements OnInit{
       next: (res) => {
         if (res.status === 204) {
           console.log(`${this.appUser?.username} sended a friend request to: ${groupId}`);
+          this.chatService.getGroupList(this.appUser!.id);
         }
       }
     })
+
   }
   closeModal() {
     this.closeModalEvent.emit();
